@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import Link from '@/components/localized-link'
 import Image from 'next/image'
 import { useState } from 'react'
 import { Check, Plus, Package } from 'lucide-react'
@@ -33,7 +33,7 @@ export function ProductCard({ product }: { product: Product }) {
   }
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-xl hover:shadow-black/5">
+    <article className="lux-card group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card">
       <Link href={href} className="relative block aspect-4/3 overflow-hidden bg-secondary">
         {product.image ? (
           <Image

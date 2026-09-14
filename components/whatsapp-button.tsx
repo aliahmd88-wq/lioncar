@@ -14,7 +14,7 @@ export function WhatsAppButton({ whatsapp }: { whatsapp: string }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={t.common.whatsapp}
-      className="group fixed bottom-5 end-5 z-50 flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-3 text-sm font-semibold text-white shadow-xl shadow-black/20 transition-transform hover:scale-105 active:scale-95"
+      className="group fixed bottom-5 end-5 z-30 flex min-h-12 items-center gap-2 rounded-full border border-inverse-foreground/15 bg-inverse px-4 py-3 text-sm font-semibold text-inverse-foreground shadow-xl transition-colors hover:bg-primary hover:text-primary-foreground"
     >
       <MessageCircle className="size-5" aria-hidden />
       <span className="hidden sm:inline">{t.common.whatsapp}</span>

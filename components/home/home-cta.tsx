@@ -1,45 +1,23 @@
 'use client'
 
-import Link from 'next/link'
-import { MessageCircle, Clock } from 'lucide-react'
+import { MessageCircle, ArrowUpRight, Clock } from 'lucide-react'
+import Link from '@/components/localized-link'
 import { useLanguage } from '@/lib/i18n/context'
 import { Eyebrow } from '@/components/section-heading'
 
 export function HomeCta({ whatsapp, hours }: { whatsapp: string; hours: string }) {
   const { t } = useLanguage()
-  const wa = whatsapp.replace(/[^\d]/g, '')
-
+  const number = whatsapp.replace(/[^\d]/g, '')
   return (
-    <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
-      <div className="relative overflow-hidden rounded-[2rem] border border-border bg-primary px-6 py-14 text-primary-foreground sm:px-12 lg:py-20">
-        <div className="pointer-events-none absolute inset-0 hero-grid opacity-10" aria-hidden />
-        <div className="relative mx-auto flex max-w-3xl flex-col items-center gap-6 text-center">
-          <Eyebrow className="text-accent">{t.home.cta.eyebrow}</Eyebrow>
-          <h2 className="text-balance font-serif text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
-            {t.home.cta.title}
-          </h2>
-          <p className="max-w-2xl text-pretty leading-relaxed text-primary-foreground/75">{t.home.cta.lead}</p>
-          <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
-            <a
-              href={`https://wa.me/${wa}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-transform hover:scale-[1.02] active:scale-95"
-            >
-              <MessageCircle className="size-4" aria-hidden />
-              {t.home.cta.primary}
-            </a>
-            <Link
-              href="/products"
-              className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 px-6 py-3 text-sm font-semibold transition-colors hover:bg-primary-foreground/10"
-            >
-              {t.home.cta.secondary}
-            </Link>
+    <section className="site-container pb-16 lg:pb-20">
+      <div className="rounded-2xl bg-inverse text-inverse-foreground">
+        <div className="flex flex-col gap-8 px-7 py-12 sm:px-10 lg:flex-row lg:items-center lg:justify-between lg:px-12">
+          <div className="flex max-w-2xl flex-col gap-5"><Eyebrow className="text-inverse-foreground">{t.home.cta.eyebrow}</Eyebrow><h2 className="text-balance text-3xl font-extrabold leading-tight sm:text-4xl">{t.home.cta.title}</h2><p className="text-pretty text-base leading-relaxed text-inverse-foreground/75">{t.home.cta.lead}</p></div>
+          <div className="flex shrink-0 flex-col gap-4 lg:max-w-64">
+            <a href={`https://wa.me/${number}`} target="_blank" rel="noopener noreferrer" className="action-primary"><MessageCircle className="size-5" aria-hidden />{t.home.cta.primary}<ArrowUpRight className="size-4 flip-x" aria-hidden /></a>
+            <Link href="/products" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-inverse-foreground/25 px-6 py-3 text-sm font-semibold text-inverse-foreground transition-colors hover:bg-inverse-foreground/10">{t.home.cta.secondary}</Link>
+            {hours && <p className="inline-flex items-start gap-2 text-sm leading-relaxed text-inverse-foreground/70"><Clock className="mt-0.5 size-4 shrink-0" aria-hidden /><span>{hours}</span></p>}
           </div>
-          <p className="inline-flex items-center gap-2 text-sm text-primary-foreground/60">
-            <Clock className="size-4" aria-hidden />
-            {hours}
-          </p>
         </div>
       </div>
     </section>

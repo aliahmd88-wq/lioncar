@@ -5,11 +5,11 @@ export function Eyebrow({ children, className }: { children: ReactNode; classNam
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent',
+        'inline-flex items-center gap-2.5 text-sm font-bold uppercase tracking-wider text-foreground',
         className,
       )}
     >
-      <span className="h-px w-6 bg-accent/60" aria-hidden />
+      <span className="h-0.5 w-6 bg-primary" aria-hidden />
       {children}
     </span>
   )
@@ -39,9 +39,9 @@ export function SectionHeading({
       )}
     >
       {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-      <h2 className="text-balance text-3xl font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl">
+      <h2 className="text-balance font-sans text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">
         {title}
-        {titleEm ? <span className="text-accent"> {titleEm}</span> : null}
+        {titleEm ? <span> {titleEm}</span> : null}
       </h2>
       {lead ? (
         <p

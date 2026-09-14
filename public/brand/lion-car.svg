@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+	<html dir="rtl" lang="he-IL">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>התחבר &rsaquo; צי עלי &#8212; וורדפרס</title>
+	<meta name='robots' content='noindex, follow' />
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<link rel='stylesheet' id='dashicons-css' href='https://a-f.site/wp-includes/css/dashicons.min.css?ver=7.1' media='all' />
+<link rel='stylesheet' id='buttons-rtl-css' href='https://a-f.site/wp-includes/css/buttons-rtl.min.css?ver=7.1' media='all' />
+<link rel='stylesheet' id='forms-rtl-css' href='https://a-f.site/wp-admin/css/forms-rtl.min.css?ver=7.1' media='all' />
+<link rel='stylesheet' id='l10n-rtl-css' href='https://a-f.site/wp-admin/css/l10n-rtl.min.css?ver=7.1' media='all' />
+<link rel='stylesheet' id='wp-base-styles-css' href='https://a-f.site/wp-includes/css/dist/base-styles/admin-schemes.min.css?ver=7.1' media='all' />
+<link rel='stylesheet' id='wp-tooltip-css' href='https://a-f.site/wp-admin/css/wp-tooltip.min.css?ver=7.1' media='all' />
+<link rel='stylesheet' id='login-rtl-css' href='https://a-f.site/wp-admin/css/login-rtl.min.css?ver=7.1' media='all' />
+	<meta name='referrer' content='strict-origin-when-cross-origin' />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="icon" href="https://a-f.site/wp-content/uploads/2026/06/cropped-fav-1-32x32.png" sizes="32x32" />
+<link rel="icon" href="https://a-f.site/wp-content/uploads/2026/06/cropped-fav-1-192x192.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://a-f.site/wp-content/uploads/2026/06/cropped-fav-1-180x180.png" />
+<meta name="msapplication-TileImage" content="https://a-f.site/wp-content/uploads/2026/06/cropped-fav-1-270x270.png" />
+	</head>
+	<body class="login no-js login-action-login wp-core-ui admin-color-modern rtl locale-he-il">
+	<script>
+document.body.className = document.body.className.replace('no-js','js');
+</script>
+
+				<h1 class="screen-reader-text">התחבר</h1>
+			<div id="login">
+		<h1 role="presentation" class="wp-login-logo"><a href="https://he.wordpress.org/">פועל על וורדפרס</a></h1>
+	
+		<form name="loginform" id="loginform" action="https://a-f.site/wp-login.php" method="post">
+			<p>
+				<label for="user_login">שם משתמש או כתובת אימייל</label>
+				<input type="text" name="log" id="user_login" class="input ltr" value="" size="20" autocapitalize="off" autocomplete="username" required="required" />
+			</p>
+
+			<div class="user-pass-wrap">
+				<label for="user_pass">סיסמה</label>
+				<div class="wp-pwd">
+					<input type="password" name="pwd" id="user_pass" class="input password-input ltr" value="" size="20" autocomplete="current-password" spellcheck="false" required="required" />
+					<button type="button" class="button button-secondary wp-hide-pw hide-if-no-js" data-toggle="0" aria-label="הצג סיסמה">
+						<span class="dashicons dashicons-visibility" aria-hidden="true"></span>
+					</button>
+				</div>
+			</div>
+									<p class="forgetmenot">
+				<input name="rememberme" type="checkbox" id="rememberme" value="forever"  />
+				<label for="rememberme">זכור אותי</label>
+				<span class="wp-tooltip wp-is-toggletip">
+				<button aria-haspopup="dialog" class="wp-tooltip__toggle" popovertarget="rememberme-help-toggletip" type="button" aria-label="עזרה"><span class="dashicons dashicons-editor-help" aria-hidden="true"></span></button>
+				<span popover="auto" id="rememberme-help-toggletip" class="wp-tooltip__bubble" role="dialog" aria-label="עזרה" tabindex="-1" autofocus><span id="rememberme-help-toggletip-text" class="wp-tooltip__text">Selecting &quot;Remember Me&quot; increases the length of time until you&#8217;re asked to log in again on this device. To keep your account secure, use this option only on your personal devices.</span><button type="button" class="wp-tooltip__close" popovertarget="rememberme-help-toggletip" popovertargetaction="hide" aria-label="סגור"><span class="dashicons dashicons-no-alt" aria-hidden="true"></span></button></span></span>			</p>
+			<p class="submit">
+				<input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="התחבר" />
+									<input type="hidden" name="redirect_to" value="https://a-f.site/wp-admin/" />
+									<input type="hidden" name="testcookie" value="1" />
+			</p>
+		</form>
+
+					<p id="nav">
+				<a rel="nofollow" class="wp-login-register" href="https://a-f.site/wp-login.php?action=register">הרשמה</a> | <a class="wp-login-lost-password" href="https://a-f.site/wp-login.php?action=lostpassword">שחזור סיסמה</a>			</p>
+			<script>
+function wp_attempt_focus() {setTimeout( function() {try {d = document.getElementById( "user_login" );d.focus(); d.select();} catch( er ) {}}, 200);}
+wp_attempt_focus();
+if ( typeof wpOnload === 'function' ) { wpOnload() }
+</script>
+		<p id="backtoblog">
+			<a href="https://a-f.site/">עבור אל צי עלי</a>		</p>
+			</div>
+				<div class="language-switcher">
+				<form id="language-switcher" method="get">
+
+					<label for="language-switcher-locales">
+						שפה<span class="dashicons dashicons-translation" aria-hidden="true"></span>
+					</label>
+
+					<select name="wp_lang" id="language-switcher-locales"><option value="en_US" lang="en" data-installed="1">English (United States)</option>
+<option value="ar" lang="ar" data-installed="1">العربية</option>
+<option value="he_IL" lang="he" selected='selected' data-installed="1">עִבְרִית</option></select>
+					
+											<input type="hidden" name="redirect_to" value="https://a-f.site/wp-admin/" />
+					
+					
+						<input type="submit" class="button" value="שינוי">
+
+					</form>
+				</div>
+			
+	<script id="clipboard-js" src="https://a-f.site/wp-includes/js/clipboard.min.js?ver=2.0.11"></script>
+<script id="jquery-core-js" src="https://a-f.site/wp-includes/js/jquery/jquery.min.js?ver=3.7.1"></script>
+<script id="jquery-migrate-js" src="https://a-f.site/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"></script>
+<script id="zxcvbn-async-js-extra">
+var _zxcvbnSettings = {"src":"https://a-f.site/wp-includes/js/zxcvbn.min.js"};
+//# sourceURL=zxcvbn-async-js-extra
+</script>
+<script id="zxcvbn-async-js" src="https://a-f.site/wp-includes/js/zxcvbn-async.min.js?ver=1.0"></script>
+<script id="wp-hooks-js" src="https://a-f.site/wp-includes/js/dist/hooks.min.js?ver=f0f188028580e8dc1255"></script>
+<script id="wp-i18n-js" src="https://a-f.site/wp-includes/js/dist/i18n.min.js?ver=1dfe7db3940c23ea9216"></script>
+<script id="wp-i18n-js-after">
+wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'rtl' ] } );
+//# sourceURL=wp-i18n-js-after
+</script>
+<script id="password-strength-meter-js-extra">
+var pwsL10n = {"unknown":"\u05d7\u05d5\u05d6\u05e7 \u05e1\u05d9\u05e1\u05de\u05d4 \u05dc\u05d0 \u05d9\u05d3\u05d5\u05e2","short":"\u05d7\u05dc\u05e9 \u05de\u05d0\u05d5\u05d3","bad":"\u05d7\u05dc\u05e9","good":"\u05d1\u05d9\u05e0\u05d5\u05e0\u05d9","strong":"\u05d7\u05d6\u05e7","mismatch":"\u05e9\u05d2\u05d5\u05d9"};
+//# sourceURL=password-strength-meter-js-extra
+</script>
+<script id="password-strength-meter-js-translations">
+( function( domain, translations ) {
+	var localeData = translations.locale_data[ domain ] || translations.locale_data.messages;
+	localeData[""].domain = domain;
+	wp.i18n.setLocaleData( localeData, domain );
+} )( "default", {"translation-revision-date":"2024-05-04 18:39:24+0000","generator":"GlotPress\/4.0.1","domain":"messages","locale_data":{"messages":{"":{"domain":"messages","plural-forms":"nplurals=2; plural=n != 1;","lang":"he_IL"},"%1$s is deprecated since version %2$s! Use %3$s instead. Please consider writing more inclusive code.":["%1$s \u05d4\u05d5\u05e6\u05d0\u05d4 \u05de\u05e9\u05d9\u05de\u05d5\u05e9 \u05de\u05d2\u05e8\u05e1\u05d4 %2$s! \u05d1\u05de\u05e7\u05d5\u05dd \u05d6\u05d0\u05ea \u05e0\u05d9\u05ea\u05df \u05dc\u05d4\u05e9\u05ea\u05de\u05e9 \u05d1-%3$s. \u05d9\u05e9 \u05dc\u05e9\u05e7\u05d5\u05dc \u05dc\u05db\u05ea\u05d5\u05d1 \u05e7\u05d5\u05d3 \u05db\u05d5\u05dc\u05dc \u05d9\u05d5\u05ea\u05e8."]}},"comment":{"reference":"wp-admin\/js\/password-strength-meter.js"}} );
+//# sourceURL=password-strength-meter-js-translations
+</script>
+<script id="password-strength-meter-js" src="https://a-f.site/wp-admin/js/password-strength-meter.min.js?ver=7.1"></script>
+<script id="underscore-js" src="https://a-f.site/wp-includes/js/underscore.min.js?ver=1.13.8"></script>
+<script id="wp-util-js-extra">
+var _wpUtilSettings = {"ajax":{"url":"/wp-admin/admin-ajax.php"}};
+//# sourceURL=wp-util-js-extra
+</script>
+<script id="wp-util-js" src="https://a-f.site/wp-includes/js/wp-util.min.js?ver=7.1"></script>
+<script id="wp-dom-ready-js" src="https://a-f.site/wp-includes/js/dist/dom-ready.min.js?ver=3fe927cab37bf38d6a23"></script>
+<script id="wp-a11y-js-translations">
+( function( domain, translations ) {
+	var localeData = translations.locale_data[ domain ] || translations.locale_data.messages;
+	localeData[""].domain = domain;
+	wp.i18n.setLocaleData( localeData, domain );
+} )( "default", {"translation-revision-date":"2023-05-28 22:06:16+0000","generator":"GlotPress\/4.0.1","domain":"messages","locale_data":{"messages":{"":{"domain":"messages","plural-forms":"nplurals=2; plural=n != 1;","lang":"he_IL"},"Notifications":["\u05d4\u05ea\u05e8\u05d0\u05d5\u05ea"]}},"comment":{"reference":"wp-includes\/js\/dist\/a11y.js"}} );
+//# sourceURL=wp-a11y-js-translations
+</script>
+<script id="wp-a11y-js" src="https://a-f.site/wp-includes/js/dist/a11y.min.js?ver=31c6cec5a4ff7aff483d"></script>
+<script id="user-profile-js-extra">
+var userProfileL10n = {"user_id":"0","nonce":"b4b4adab29"};
+//# sourceURL=user-profile-js-extra
+</script>
+<script id="user-profile-js-translations">
+( function( domain, translations ) {
+	var localeData = translations.locale_data[ domain ] || translations.locale_data.messages;
+	localeData[""].domain = domain;
+	wp.i18n.setLocaleData( localeData, domain );
+} )( "default", {"translation-revision-date":"2024-05-04 18:39:24+0000","generator":"GlotPress\/4.0.1","domain":"messages","locale_data":{"messages":{"":{"domain":"messages","plural-forms":"nplurals=2; plural=n != 1;","lang":"he_IL"},"Your new password has not been saved.":["\u05d4\u05e1\u05d9\u05e1\u05de\u05d4 \u05d4\u05d7\u05d3\u05e9\u05d4 \u05dc\u05d0 \u05e0\u05e9\u05de\u05e8\u05d4."],"Show":["\u05d4\u05e6\u05d2"],"Hide":["\u05d4\u05e1\u05ea\u05e8"],"Hide password":["\u05d4\u05e1\u05ea\u05e8 \u05e1\u05d9\u05e1\u05de\u05d4"],"Show password":["\u05d4\u05e6\u05d2 \u05e1\u05d9\u05e1\u05de\u05d4"],"Confirm use of weak password":["\u05d0\u05e9\u05e8 \u05e9\u05d9\u05de\u05d5\u05e9 \u05d1\u05e1\u05d9\u05e1\u05de\u05d4 \u05d7\u05dc\u05e9\u05d4"]}},"comment":{"reference":"wp-admin\/js\/user-profile.js"}} );
+//# sourceURL=user-profile-js-translations
+</script>
+<script id="user-profile-js" src="https://a-f.site/wp-admin/js/user-profile.min.js?ver=7.1"></script>
+<script id="wp-tooltip-js" src="https://a-f.site/wp-includes/js/wp-tooltip.js?ver=7.1"></script>
+			<script>
+			/(trident|msie)/i.test(navigator.userAgent)&&document.getElementById&&window.addEventListener&&window.addEventListener("hashchange",function(){var t,e=location.hash.substring(1);/^[A-z0-9_-]+$/.test(e)&&(t=document.getElementById(e))&&(/^(?:a|select|input|button|textarea)$/i.test(t.tagName)||(t.tabIndex=-1),t.focus())},!1);
+			</script>
+				</body>
+	</html>
+	

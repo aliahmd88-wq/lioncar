@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import Link from '@/components/localized-link'
 import Image from 'next/image'
 import { ArrowUpRight, Gauge, Calendar, MapPin, Car } from 'lucide-react'
 import { useLanguage } from '@/lib/i18n/context'
@@ -19,7 +19,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
       : (t.cars.saleStatus as Record<string, string>)[vehicle.status] ?? vehicle.status
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-xl hover:shadow-black/5">
+    <article className="lux-card group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card">
       <Link href={href} className="relative block aspect-16/10 overflow-hidden bg-secondary">
         {vehicle.image ? (
           <Image

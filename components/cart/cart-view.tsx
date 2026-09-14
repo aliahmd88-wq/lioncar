@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import Link from '@/components/localized-link'
 import Image from 'next/image'
 import { Minus, Plus, ShoppingCart, Trash2, MessageCircle, Package } from 'lucide-react'
 import { useLanguage } from '@/lib/i18n/context'

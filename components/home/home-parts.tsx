@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import Link from '@/components/localized-link'
 import { ArrowRight } from 'lucide-react'
 import { useLanguage } from '@/lib/i18n/context'
 import { SectionHeading } from '@/components/section-heading'
@@ -13,12 +13,12 @@ export function HomeParts({ products }: { products: Product[] }) {
   if (products.length === 0) return null
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+    <section className="site-container py-16 lg:py-20">
       <div className="flex flex-wrap items-end justify-between gap-6">
         <SectionHeading eyebrow={t.products.eyebrow} title={t.products.title} titleEm={t.products.titleEm} />
         <Link
           href="/products"
-          className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-semibold transition-colors hover:border-accent hover:text-accent"
+          className="action-outline"
         >
           {t.nav.products}
           <ArrowRight className="size-4 flip-x" aria-hidden />

@@ -29,8 +29,8 @@ export default async function HomePage() {
   return (
     <>
       <HomeHero slides={heroSlides} />
-      <HomeStats partsCount={products.length} />
-      <HomeFleet />
+      <HomeStats partsCount={products.length} vehicleCount={vehicles.length} brandsCount={new Set(products.map((product) => product.brand).filter(Boolean)).size} />
+      <HomeFleet vehicles={vehicles} />
       <HomeServices />
       <HomeParts products={featuredProducts} />
       <HomeCta whatsapp={store.whatsapp} hours={store.hours} />
