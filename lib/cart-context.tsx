@@ -6,6 +6,8 @@ import type { Localized } from '@/lib/wp/types'
 
 export type CartItem = {
   slug: string
+  /** WooCommerce product id, needed to hand the basket to checkout. */
+  wooId: number
   name: Localized
   price: string | null
   image: string | null
@@ -22,7 +24,7 @@ type CartAction =
   | { type: 'clear' }
   | { type: 'hydrate'; state: CartState }
 
-const STORAGE_KEY = 'leoncar_cart_v1'
+const STORAGE_KEY = 'lioncar_cart_v1'
 const MAX_QTY = 99
 
 function reducer(state: CartState, action: CartAction): CartState {

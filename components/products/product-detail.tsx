@@ -25,7 +25,7 @@ export function ProductDetail({ product, related }: { product: Product; related:
   const wa = 'https://wa.me/972539573718?text=' + encodeURIComponent(`${t.productDetail.askAbout}: ${name} (${product.sku})`)
 
   const onAdd = () => {
-    add({ slug: product.slug, name: product.name, price: product.price, image: product.image, brand: product.brand }, qty)
+    add({ slug: product.slug, wooId: product.wooId, name: product.name, price: product.price, image: product.image, brand: product.brand }, qty)
     setAdded(true)
     setTimeout(() => setAdded(false), 1600)
   }

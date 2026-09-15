@@ -67,6 +67,7 @@ function normalize(raw: RawProduct): Product {
 
   return {
     slug: raw.slug,
+    wooId: raw.databaseId,
     sku: acf.sku ? String(acf.sku) : String(acf.oeNumber ?? ''),
     brand: acf.brand ? String(acf.brand) : '',
     categories: asArray(acf.partCategory).concat(

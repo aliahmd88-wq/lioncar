@@ -11,13 +11,15 @@ const HIGHLIGHT_FIELDS = Array.from({ length: 8 }, (_, i) => `highlight${i + 1} 
 
 const commonAcf = `
   carModel carSubtitleHe carSubtitleAr carSubtitleEn
-  bodyType origin status stage year mileage price featured vehicleUses
+  bodyType status year mileage price featured vehicleUses
   descriptionHe descriptionAr descriptionEn
-  etaHe etaAr etaEn
   specs { engine transmission fuel drivetrain colorHe colorAr colorEn seats }
   ${HIGHLIGHT_FIELDS}
   ${GALLERY_FIELDS}
 `
+
+// Only the import (to-order) group carries the sourcing origin, the four-step stage and the ETA.
+const importOnlyAcf = `origin stage etaHe etaAr etaEn`
 
 function normalize(raw: any, kind: VehicleKind, acfKey: string): Vehicle {
   const acf = (raw?.[acfKey] ?? {}) as Record<string, any>
@@ -96,7 +98,7 @@ export async function getImportCars(): Promise<Vehicle[]> {
         nodes {
           databaseId slug title
           featuredImage { node { sourceUrl altText } }
-          importCarFields { ${commonAcf} featuredImage { node { sourceUrl } } }
+          importCarFields { ${commonAcf} ${importOnlyAcf} featuredImage { node { sourceUrl } } }
         }
       }
     }
@@ -112,7 +114,7 @@ export async function getImportCar(slug: string): Promise<Vehicle | null> {
       importCar(id: $slug, idType: SLUG) {
         databaseId slug title
         featuredImage { node { sourceUrl altText } }
-        importCarFields { ${commonAcf} featuredImage { node { sourceUrl } } }
+        importCarFields { ${commonAcf} ${importOnlyAcf} featuredImage { node { sourceUrl } } }
       }
     }
   `

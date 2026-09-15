@@ -1,4 +1,3 @@
-import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Cairo, Noto_Sans_Hebrew } from 'next/font/google'
 import { Providers } from '@/components/providers'
@@ -18,10 +17,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const [locale, path] = await Promise.all([readLocale(), readPath()])
   const t = getDictionary(locale)
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://leoncar.co.il'),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://lioncar.co.il'),
     title: { default: t.seo.siteTitle, template: `%s | ${t.seo.orgName}` },
     description: t.seo.siteDescription,
-    generator: 'v0.app',
     icons: { icon: '/brand/lion-mark.png', apple: '/brand/lion-mark.png' },
     openGraph: {
       title: t.seo.siteTitle,
@@ -34,7 +32,10 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     alternates: {
       canonical: localeHref(path, locale),
-      languages: Object.fromEntries(locales.map((value) => [value, localeHref(path, value)])),
+      languages: {
+        ...Object.fromEntries(locales.map((value) => [value, localeHref(path, value)])),
+        'x-default': localeHref(path, 'he'),
+      },
     },
   }
 }
@@ -52,7 +53,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <SiteFooter store={store} />
           <WhatsAppButton whatsapp={store.whatsapp} />
         </Providers>
-        {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
   )

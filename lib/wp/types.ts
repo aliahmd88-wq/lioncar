@@ -10,6 +10,8 @@ export type Spec = { label: Localized; value: Localized }
 
 export type Product = {
   slug: string
+  /** WooCommerce product id (databaseId). */
+  wooId: number
   sku: string
   brand: string
   categories: string[]
@@ -69,6 +71,8 @@ export type StoreSettings = {
   email: string
   hours: string
   address: string
+  /** WooCommerce origin that owns checkout (https://a-f.site). */
+  storeUrl: string
   facebook: string | null
   instagram: string | null
   tiktok: string | null

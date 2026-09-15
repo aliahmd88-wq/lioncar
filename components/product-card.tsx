@@ -21,6 +21,7 @@ export function ProductCard({ product }: { product: Product }) {
     add(
       {
         slug: product.slug,
+        wooId: product.wooId,
         name: product.name,
         price: product.price,
         image: product.image,

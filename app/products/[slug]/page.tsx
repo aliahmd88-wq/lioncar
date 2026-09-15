@@ -1,10 +1,9 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { cookies } from 'next/headers'
 import { getProduct, getProducts } from '@/lib/wp/products'
 import { ProductDetail } from '@/components/products/product-detail'
 import { getDictionary } from '@/lib/i18n'
-import { defaultLocale, isLocale, LOCALE_COOKIE } from '@/lib/i18n/config'
+import { readLocale } from '@/lib/i18n/server'
 import { pick } from '@/lib/wp/types'
 
 export const revalidate = 600
@@ -15,9 +14,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const store = await cookies()
-  const value = store.get(LOCALE_COOKIE)?.value
-  const locale = isLocale(value) ? value : defaultLocale
+  const locale = await readLocale()
   const product = await getProduct(slug)
   if (!product) return { title: getDictionary(locale).productDetail.notFound }
   return {

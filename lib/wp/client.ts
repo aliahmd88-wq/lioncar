@@ -1,7 +1,7 @@
 import 'server-only'
 
 const ENDPOINT = process.env.WORDPRESS_GRAPHQL_ENDPOINT || 'https://a-f.site/graphql'
-const ORIGIN = 'https://leoncar.co.il'
+const ORIGIN = 'https://lioncar.co.il'
 
 type GraphQLResponse<T> = {
   data?: T
@@ -10,7 +10,7 @@ type GraphQLResponse<T> = {
 
 /**
  * Server-only WPGraphQL fetch. The upstream WordPress locks requests to the
- * production origin, so we always send `Origin: https://leoncar.co.il`.
+ * production origin, so we always send `Origin: https://lioncar.co.il`.
  */
 export async function wpQuery<T>(
   query: string,

@@ -4,9 +4,10 @@ import type { StoreSettings } from './types'
 const FALLBACK: StoreSettings = {
   phone: '053-957-3718',
   whatsapp: '972539573718',
-  email: 'info@leoncar.co.il',
+  email: 'info@lioncar.co.il',
   hours: 'Sat–Thu 09:00–18:00 · Friday closed',
   address: 'Main road 745, Reineh, Israel',
+  storeUrl: 'https://a-f.site',
   facebook: null,
   instagram: null,
   tiktok: null,
@@ -15,7 +16,7 @@ const FALLBACK: StoreSettings = {
 export async function getStoreSettings(): Promise<StoreSettings> {
   const query = `
     query StoreSettings {
-      storeSettings { phone whatsapp email hours facebook instagram tiktok }
+      storeSettings { phone whatsapp email addressLines hours facebook instagram tiktok storeUrl }
     }
   `
   const data: any = await wpQuery(query)
@@ -26,7 +27,8 @@ export async function getStoreSettings(): Promise<StoreSettings> {
     whatsapp: s.whatsapp || FALLBACK.whatsapp,
     email: s.email || FALLBACK.email,
     hours: s.hours || FALLBACK.hours,
-    address: FALLBACK.address,
+    address: Array.isArray(s.addressLines) && s.addressLines.length ? s.addressLines.filter(Boolean).join(', ') : FALLBACK.address,
+    storeUrl: s.storeUrl || FALLBACK.storeUrl,
     facebook: s.facebook || null,
     instagram: s.instagram || null,
     tiktok: s.tiktok || null,
