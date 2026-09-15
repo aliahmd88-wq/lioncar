@@ -150,3 +150,18 @@
   .hero-strip-track > * { scroll-snap-align: start; }
   .hero-strip-duplicate { display: none; }
 }
+
+/* Editorial home (Option A): image swap, globe ornaments, scene reveals. */
+.fade-in { animation: fade-in 500ms ease-out both; }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+.orbit-ring { animation: orbit 40s linear infinite; }
+.orbit-ring-2 { animation: orbit 55s linear infinite reverse; }
+.satellite-track { animation: orbit 22s linear infinite; }
+.satellite { animation: orbit 22s linear infinite reverse; }
+.globe-chip { animation: float 2.6s ease-in-out infinite alternate; }
+.globe-chip:nth-child(even) { animation-delay: -1.3s; }
+@keyframes orbit { to { transform: rotate(360deg); } }
+@keyframes float { from { translate: 0 -8px; } to { translate: 0 8px; } }
+@media (prefers-reduced-motion: reduce) {
+  .orbit-ring, .orbit-ring-2, .satellite-track, .satellite, .globe-chip, .hero-enter, .fade-in { animation: none; }
+}

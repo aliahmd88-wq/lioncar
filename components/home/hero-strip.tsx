@@ -28,6 +28,7 @@ export function HeroStrip({
   items,
   reverse = false,
   wide = false,
+  tone = 'dark',
 }: {
   label: string
   count: number
@@ -36,21 +37,24 @@ export function HeroStrip({
   items: StripItem[]
   reverse?: boolean
   wide?: boolean
+  /** dark: over the video header; light: on the white page. */
+  tone?: 'dark' | 'light'
 }) {
   if (items.length === 0) return null
   const loop = [...items, ...items]
+  const light = tone === 'light'
 
   return (
-    <div className="border-t border-white/10 py-3">
+    <div className={cn('border-t py-3', light ? 'border-border' : 'border-white/10')}>
       <div className="site-container flex items-center justify-between gap-4">
-        <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-white/85">
+        <p className={cn('flex items-center gap-2 text-xs font-bold uppercase tracking-wider', light ? 'text-foreground' : 'text-white/85')}>
           <span className="size-2 rounded-full bg-primary" aria-hidden />
           {label}
-          <span dir="ltr" className="font-semibold text-white/50">
+          <span dir="ltr" className={cn('font-semibold', light ? 'text-muted-foreground' : 'text-white/50')}>
             ({count})
           </span>
         </p>
-        <Link href={href} className="inline-flex items-center gap-1 text-xs font-semibold text-white transition-colors hover:text-primary">
+        <Link href={href} className={cn('inline-flex items-center gap-1 text-xs font-semibold transition-colors hover:text-primary', light ? 'text-foreground' : 'text-white')}>
           {viewAllLabel}
           <ArrowUpRight className="size-3.5 flip-x" aria-hidden />
         </Link>
@@ -67,7 +71,8 @@ export function HeroStrip({
                 aria-hidden={duplicate || undefined}
                 tabIndex={duplicate ? -1 : undefined}
                 className={cn(
-                  'flex shrink-0 items-center gap-3 rounded-xl border border-white/10 bg-white/95 p-2 text-foreground shadow-lg transition-colors hover:border-primary',
+                  'flex shrink-0 items-center gap-3 rounded-xl border p-2 text-foreground transition-colors hover:border-primary',
+                  light ? 'border-border bg-card shadow-sm' : 'border-white/10 bg-white/95 shadow-lg',
                   wide ? 'w-72' : 'w-60',
                   duplicate && 'hero-strip-duplicate',
                 )}
