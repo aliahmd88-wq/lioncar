@@ -4,17 +4,24 @@ import { useEffect, useRef, useState } from 'react'
 import { Pause, Play } from 'lucide-react'
 import { useLanguage } from '@/lib/i18n/context'
 
+// First scene: the moving car — personal / premium car import.
+// Second scene: the port — direct import.
 const SCENES = [
   { src: '/videos/scene-showroom.mp4', poster: '/images/hero-scene-showroom-poster.png' },
   { src: '/videos/scene-port.mp4', poster: '/images/hero-scene-port-poster.png' },
 ] as const
 
-const CROSSFADE_MS = 8000
+// Each scene plays alone for this long before switching to the next.
+const SCENE_MS = 8000
+// The switch fades the current scene out to black, then the next one in,
+// so the two videos are never blended on top of each other.
+const FADE_MS = 700
 
 export function HeroVideoBackground() {
   const { t } = useLanguage()
   const [useVideo, setUseVideo] = useState(false)
   const [active, setActive] = useState(0)
+  const [visible, setVisible] = useState(true)
   const [paused, setPaused] = useState(false)
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
 
@@ -32,11 +39,22 @@ export function HeroVideoBackground() {
     }
   }, [])
 
-  // Crossfade between the two scenes on an interval while playing.
+  // Switch scenes one at a time: fade the current one out to black, then
+  // bring the next one in. The two videos are never shown together.
   useEffect(() => {
     if (!useVideo || paused) return
-    const interval = window.setInterval(() => setActive((current) => (current + 1) % SCENES.length), CROSSFADE_MS)
-    return () => window.clearInterval(interval)
+    let fadeTimer: number
+    const interval = window.setInterval(() => {
+      setVisible(false)
+      fadeTimer = window.setTimeout(() => {
+        setActive((current) => (current + 1) % SCENES.length)
+        setVisible(true)
+      }, FADE_MS)
+    }, SCENE_MS)
+    return () => {
+      window.clearInterval(interval)
+      window.clearTimeout(fadeTimer)
+    }
   }, [useVideo, paused])
 
   // Keep playback state in sync with the pause control.
@@ -58,8 +76,8 @@ export function HeroVideoBackground() {
             ref={(node) => {
               videoRefs.current[i] = node
             }}
-            className="absolute inset-0 size-full object-cover transition-opacity duration-[1200ms] ease-in-out"
-            style={{ opacity: i === active ? 1 : 0 }}
+            className="absolute inset-0 size-full object-cover transition-opacity ease-in-out"
+            style={{ opacity: i === active && visible ? 1 : 0, transitionDuration: `${FADE_MS}ms` }}
             autoPlay
             muted
             loop
