@@ -20,5 +20,7 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
+  // /checkout, /cms and /wc-ajax proxy the WooCommerce checkout and must
+  // receive the browser's request untouched (POST bodies, cookies, no prefix).
+  matcher: ['/((?!api|checkout|cms|wc-ajax|_next|_vercel|.*\\..*).*)'],
 }

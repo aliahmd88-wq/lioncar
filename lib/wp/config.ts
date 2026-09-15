@@ -1,22 +1,11 @@
 /**
  * WordPress / WooCommerce backend wiring.
  *
- * Everything account-related talks to WordPress through a single WPGraphQL
- * endpoint. That endpoint does not exist yet, so instead of hard-coding a
- * hostname and failing with opaque network errors, the whole account system
- * reads its address from an environment variable and reports a clean
- * "backend not connected" state until it is set.
- *
- * To go live, set `WORDPRESS_GRAPHQL_ENDPOINT` to the full GraphQL URL, e.g.
- *   WORDPRESS_GRAPHQL_ENDPOINT=https://store.alifleet.com/graphql
- *
- * Required WordPress plugins:
- *   - WPGraphQL
- *   - WPGraphQL JWT Authentication  (login / refreshJwtAuthToken)
- *   - WooGraphQL (WPGraphQL for WooCommerce)  (customer / orders)
- *
- * WPGraphQL JWT Authentication also needs a signing secret in wp-config.php:
- *   define( 'GRAPHQL_JWT_AUTH_SECRET_KEY', '<a long random string>' );
+ * Lion Car reads its catalogue from the WordPress install that also served
+ * ALI FLEET (WPGraphQL + WooCommerce + ACF on a-f.site) and hands the basket
+ * to WooCommerce for checkout. The endpoint comes from
+ * `WORDPRESS_GRAPHQL_ENDPOINT`; the literal fallback keeps a forgotten env var
+ * from turning into an opaque network error.
  */
 
 const LIVE_ENDPOINT = 'https://a-f.site/graphql'
@@ -37,8 +26,8 @@ export function isWpConfigured(): boolean {
 
 /**
  * The storefront origin, derived from the GraphQL endpoint so there is only one
- * hostname to configure. `https://cms.alifleet.com/graphql` yields
- * `https://cms.alifleet.com`. Override with `WORDPRESS_STORE_URL` when the shop
+ * hostname to configure. `https://a-f.site/graphql` yields
+ * `https://a-f.site`. Override with `WORDPRESS_STORE_URL` when the shop
  * front lives on a different host than the API.
  */
 export function wpStoreOrigin(): string {
@@ -81,8 +70,3 @@ export function wpRevalidateSecret(): string {
   return (process.env.WORDPRESS_REVALIDATE_SECRET ?? '').trim()
 }
 
-/** How long we keep the short-lived JWT access token in its cookie. */
-export const AUTH_TOKEN_MAX_AGE = 60 * 60 // 1 hour
-
-/** How long the refresh token stays valid — this is the real session length. */
-export const REFRESH_TOKEN_MAX_AGE = 60 * 60 * 24 * 30 // 30 days

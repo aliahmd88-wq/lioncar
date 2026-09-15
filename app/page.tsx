@@ -7,6 +7,7 @@ import { HomeFleet } from '@/components/home/home-fleet'
 import { HomeServices } from '@/components/home/home-services'
 import { HomeParts } from '@/components/home/home-parts'
 import { HomeCta } from '@/components/home/home-cta'
+import { HomeFaq } from '@/components/home/home-faq'
 
 export const revalidate = 600
 
@@ -33,6 +34,7 @@ export default async function HomePage() {
       <HomeFleet vehicles={vehicles} />
       <HomeServices />
       <HomeParts products={featuredProducts} />
+      <HomeFaq />
       <HomeCta whatsapp={store.whatsapp} hours={store.hours} />
     </>
   )

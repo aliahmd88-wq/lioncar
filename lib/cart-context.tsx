@@ -1,8 +1,9 @@
 'use client'
 
-import { createContext, useContext, useEffect, useMemo, useReducer } from 'react'
+import { createContext, useContext, useEffect, useMemo, useReducer, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { Localized } from '@/lib/wp/types'
+import { CART_QUANTITY_COOKIE, CART_STORAGE_KEY } from '@/lib/checkout/gate'
 
 export type CartItem = {
   slug: string
@@ -24,7 +25,7 @@ type CartAction =
   | { type: 'clear' }
   | { type: 'hydrate'; state: CartState }
 
-const STORAGE_KEY = 'lioncar_cart_v1'
+const STORAGE_KEY = CART_STORAGE_KEY
 const MAX_QTY = 99
 
 function reducer(state: CartState, action: CartAction): CartState {
@@ -77,6 +78,7 @@ const CartContext = createContext<CartContextValue | null>(null)
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, { items: [] })
+  const [ready, setReady] = useState(false)
 
   useEffect(() => {
     try {
@@ -85,15 +87,23 @@ export function CartProvider({ children }: { children: ReactNode }) {
     } catch {
       /* ignore malformed storage */
     }
+    setReady(true)
   }, [])
 
   useEffect(() => {
+    if (!ready) return
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
     } catch {
       /* ignore quota errors */
     }
-  }, [state])
+    // Mirror the basket size where the server can see it. The proxied
+    // WooCommerce checkout only renders when this agrees with the quantity the
+    // last handoff pushed, so a cleared cart can never show a stale basket.
+    const quantity = state.items.reduce((sum, i) => sum + i.quantity, 0)
+    const secure = window.location.protocol === 'https:' ? '; Secure' : ''
+    document.cookie = `${CART_QUANTITY_COOKIE}=${quantity}; Path=/; Max-Age=${2 * 24 * 60 * 60}; SameSite=Lax${secure}`
+  }, [state, ready])
 
   const value = useMemo<CartContextValue>(
     () => ({

@@ -5,6 +5,7 @@ import { Plus } from 'lucide-react'
 import { useLanguage } from '@/lib/i18n/context'
 import { SectionHeading } from '@/components/section-heading'
 import { cn } from '@/lib/utils'
+import { serializeJsonLd } from '@/lib/json-ld'
 
 export function VehicleFaq() {
   const { t } = useLanguage()
@@ -18,6 +19,20 @@ export function VehicleFaq() {
 
   return (
     <section className="border-t border-border bg-secondary/40">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: items.map((item) => ({
+              '@type': 'Question',
+              name: item.q,
+              acceptedAnswer: { '@type': 'Answer', text: item.a },
+            })),
+          }),
+        }}
+      />
       <div className="mx-auto max-w-3xl px-4 py-20 sm:px-6 lg:px-8">
         <SectionHeading eyebrow={t.cars.faqEyebrow} title={t.cars.faqTitle} align="center" className="mx-auto items-center" />
         <ul className="mt-10 flex flex-col gap-3">

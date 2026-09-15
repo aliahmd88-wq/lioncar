@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { getStoreSettings } from '@/lib/wp/store'
 import { CartView } from '@/components/cart/cart-view'
 import { getDictionary } from '@/lib/i18n'
@@ -13,5 +14,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function CartPage() {
   const store = await getStoreSettings()
-  return <CartView whatsapp={store.whatsapp} />
+  return (
+    <Suspense>
+      <CartView whatsapp={store.whatsapp} />
+    </Suspense>
+  )
 }

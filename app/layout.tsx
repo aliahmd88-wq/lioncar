@@ -8,6 +8,8 @@ import { getStoreSettings } from '@/lib/wp/store'
 import { dirFor, locales, localeHref } from '@/lib/i18n/config'
 import { readLocale, readPath } from '@/lib/i18n/server'
 import { getDictionary } from '@/lib/i18n'
+import { serializeJsonLd } from '@/lib/json-ld'
+import { siteUrl } from '@/lib/seo'
 import './globals.css'
 
 const cairo = Cairo({ subsets: ['arabic', 'latin'], variable: '--font-cairo', display: 'swap' })
@@ -44,9 +46,50 @@ export const viewport: Viewport = { themeColor: '#ffffff', colorScheme: 'light',
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const [locale, store] = await Promise.all([readLocale(), getStoreSettings()])
+  const t = getDictionary(locale)
+  // Organisation structured data: contact details come from WordPress store
+  // settings, so a phone or address change reaches Google without a redeploy.
+  const organization = {
+    '@context': 'https://schema.org',
+    '@type': 'AutoPartsStore',
+    name: t.seo.orgName,
+    alternateName: t.seo.orgAlternateName,
+    inLanguage: locale,
+    description: t.seo.siteDescription,
+    url: `${siteUrl()}/${locale}`,
+    image: `${siteUrl()}/images/truck-fleet-hero.png`,
+    logo: `${siteUrl()}/brand/lion-mark.png`,
+    telephone: store.phone || undefined,
+    email: store.email || undefined,
+    openingHours: store.hours || undefined,
+    address: store.addressLines.length
+      ? {
+          '@type': 'PostalAddress',
+          streetAddress: store.addressLines[0],
+          addressLocality: store.addressLines[1] ?? 'Reineh',
+          addressCountry: 'IL',
+        }
+      : undefined,
+    sameAs: [store.instagram, store.facebook, store.tiktok].filter(Boolean),
+    areaServed: { '@type': 'Country', name: t.seo.areaServed },
+    knowsLanguage: ['he', 'ar', 'en'],
+    priceRange: '₪₪',
+    contactPoint: store.whatsapp
+      ? [
+          {
+            '@type': 'ContactPoint',
+            contactType: 'sales',
+            telephone: `+${store.whatsapp.replace(/[^\d]/g, '')}`,
+            url: `https://wa.me/${store.whatsapp.replace(/[^\d]/g, '')}`,
+            availableLanguage: ['he', 'ar', 'en'],
+          },
+        ]
+      : undefined,
+  }
   return (
     <html lang={locale} dir={dirFor(locale)} className={`${cairo.variable} ${notoHebrew.variable} bg-background`}>
       <body className="font-sans antialiased">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(organization) }} />
         <Providers initialLocale={locale}>
           <SiteHeader store={store} />
           <main id="main-content" className="min-h-screen" tabIndex={-1}>{children}</main>

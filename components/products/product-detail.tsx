@@ -12,7 +12,7 @@ import { SectionHeading } from '@/components/section-heading'
 import { pick, type Product } from '@/lib/wp/types'
 import { cn } from '@/lib/utils'
 
-export function ProductDetail({ product, related }: { product: Product; related: Product[] }) {
+export function ProductDetail({ product, related, whatsapp }: { product: Product; related: Product[]; whatsapp: string }) {
   const { t, locale } = useLanguage()
   const { add } = useCart()
   const [qty, setQty] = useState(1)
@@ -22,7 +22,7 @@ export function ProductDetail({ product, related }: { product: Product; related:
 
   const name = pick(product.name, locale)
   const description = pick(product.description, locale)
-  const wa = 'https://wa.me/972539573718?text=' + encodeURIComponent(`${t.productDetail.askAbout}: ${name} (${product.sku})`)
+  const wa = `https://wa.me/${whatsapp.replace(/[^\d]/g, '')}?text=` + encodeURIComponent(`${t.productDetail.askAbout}: ${name}${product.sku ? ` (${product.sku})` : ''}`)
 
   const onAdd = () => {
     add({ slug: product.slug, wooId: product.wooId, name: product.name, price: product.price, image: product.image, brand: product.brand }, qty)

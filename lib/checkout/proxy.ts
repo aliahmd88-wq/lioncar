@@ -3,7 +3,7 @@ import 'server-only'
 import { headers } from 'next/headers'
 import { BodyLimitExceededError, decodeUtf8, readBodyWithLimit } from '@/lib/http-limits'
 import { wpStoreOrigin } from '@/lib/wp/config'
-import { LOCALE_STORAGE_KEY, isLocale, type Locale } from '@/lib/i18n/config'
+import { LOCALE_COOKIE as LOCALE_STORAGE_KEY, defaultLocale, isLocale, type Locale } from '@/lib/i18n/config'
 import {
   CART_QUANTITY_COOKIE,
   CART_STORAGE_KEY,
@@ -17,7 +17,7 @@ const REQUEST_BODY_LIMIT_BYTES = 512 * 1024
 const UPSTREAM_TEXT_LIMIT_BYTES = 3 * 1024 * 1024
 const UPSTREAM_ASSET_LIMIT_BYTES = 12 * 1024 * 1024
 const PRIVATE_NO_STORE = 'private, no-store, max-age=0, must-revalidate'
-const PRODUCTION_ORIGIN = 'https://alifleet.com'
+const PRODUCTION_ORIGIN = 'https://lioncar.co.il'
 const STATIC_ASSET_EXTENSION = /\.(?:avif|css|eot|gif|ico|jpe?g|js|mjs|otf|png|svg|ttf|webp|woff2?)$/i
 const UPLOAD_IMAGE_EXTENSION = /\.(?:avif|gif|jpe?g|png|webp)$/i
 const ALLOWED_WC_AJAX_ACTIONS = new Set([
@@ -91,7 +91,7 @@ function localeFromRequest(request: Request): Locale {
 
   const cookie = request.headers.get('cookie') ?? ''
   const match = cookie.match(new RegExp(`${escapeRegExp(LOCALE_STORAGE_KEY)}=([^;]+)`))
-  return isLocale(match?.[1]) ? match[1] : 'en'
+  return isLocale(match?.[1]) ? match[1] : defaultLocale
 }
 
 function notFoundResponse() {
@@ -176,7 +176,7 @@ function isAllowedSetCookie(raw: string) {
  * accepted because callers can supply them outside the trusted Vercel edge.
  */
 const CONFIGURED_ORIGIN = normalizeOrigin(
-  process.env.SITE_ORIGIN ?? process.env.NEXT_PUBLIC_SITE_ORIGIN ?? ''
+  process.env.SITE_ORIGIN ?? process.env.NEXT_PUBLIC_SITE_ORIGIN ?? process.env.NEXT_PUBLIC_SITE_URL ?? ''
 )
 
 function normalizeOrigin(value: string) {
@@ -192,8 +192,8 @@ function normalizeOrigin(value: string) {
 function isTrustedStorefrontHost(hostname: string) {
   const normalized = hostname.toLowerCase()
   return (
-    normalized === 'alifleet.com' ||
-    normalized === 'www.alifleet.com' ||
+    normalized === 'lioncar.co.il' ||
+    normalized === 'www.lioncar.co.il' ||
     normalized === 'localhost' ||
     normalized === '127.0.0.1' ||
     normalized === '::1'
@@ -366,7 +366,7 @@ function rewriteHtml(html: string, request: Request, isCheckoutPath = false) {
     he: 'חזרה לדף הבית',
   } as const
   const direction = locale === 'en' ? 'ltr' : 'rtl'
-  const returnControl = `<div data-alifleet-checkout-return style="box-sizing:border-box;max-width:1100px;margin:0 auto;padding:24px 24px 0;direction:${direction};"><a href="/?locale=${locale}" style="display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(45,58,107,.18);border-radius:999px;padding:11px 18px;color:#2d3a6b;background:#fff;text-decoration:none;font:600 14px/1.2 Arial,sans-serif;">${labels[locale]}</a></div>`
+  const returnControl = `<div data-lioncar-checkout-return style="box-sizing:border-box;max-width:1100px;margin:0 auto;padding:24px 24px 0;direction:${direction};"><a href="/${locale}" style="display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(11,11,12,.18);border-radius:999px;padding:11px 18px;color:#0B0B0C;background:#fff;text-decoration:none;font:600 14px/1.2 Arial,sans-serif;">${labels[locale]}</a></div>`
   const withoutWordPressChrome = withLocalLinks
     .replace(/<header\b[^>]*>[\s\S]*?<\/header>/gi, '')
     .replace(/<footer\b[^>]*>[\s\S]*?<\/footer>/gi, '')

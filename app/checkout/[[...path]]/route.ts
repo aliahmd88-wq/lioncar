@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers'
+import { defaultLocale, isLocale, LOCALE_COOKIE } from '@/lib/i18n/config'
 import { proxyWooRequest } from '@/lib/checkout/proxy'
 import {
   CART_QUANTITY_COOKIE,
@@ -37,10 +38,12 @@ async function handler(request: Request, context: Context) {
       }
       cookieStore.delete(HANDOFF_QUANTITY_COOKIE)
 
+      const preference = cookieStore.get(LOCALE_COOKIE)?.value
+      const locale = isLocale(preference) ? preference : defaultLocale
       return new Response(null, {
         status: 303,
         headers: {
-          location: '/cart?checkout=expired',
+          location: `/${locale}/cart?checkout=expired`,
           'cache-control': 'private, no-store, max-age=0, must-revalidate',
           pragma: 'no-cache',
           expires: '0',

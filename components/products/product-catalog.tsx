@@ -1,14 +1,21 @@
 'use client'
 
-import { useMemo, useState } from 'react'
-import { Search, SlidersHorizontal, X } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { ChevronLeft, ChevronRight, Search, SlidersHorizontal, X } from 'lucide-react'
 import { useLanguage } from '@/lib/i18n/context'
 import { ProductCard } from '@/components/product-card'
 import { Reveal } from '@/components/reveal'
 import { pick, type Product } from '@/lib/wp/types'
+import { matchesQuery } from '@/lib/search/match'
 import { cn } from '@/lib/utils'
 
 type SortKey = 'featured' | 'priceAsc' | 'priceDesc' | 'nameAsc'
+
+/** 6 rows × 4 columns on desktop; keeps 163+ parts from rendering as one wall. */
+const PAGE_SIZE = 24
+
+/** The truck makes the shop is known for, in the order they are shown; any other brand follows alphabetically. */
+const KNOWN_BRANDS = ['DAF', 'MAN', 'Volvo', 'Scania', 'Mercedes', 'Iveco']
 
 function priceValue(price: string | null): number {
   if (!price) return Number.POSITIVE_INFINITY
@@ -16,12 +23,18 @@ function priceValue(price: string | null): number {
   return Number.isFinite(n) ? n : Number.POSITIVE_INFINITY
 }
 
+function brandKey(value: string) {
+  return value.trim().toLowerCase()
+}
+
 export function ProductCatalog({ products }: { products: Product[] }) {
   const { t, locale } = useLanguage()
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState<string>('all')
+  const [brand, setBrand] = useState<string>('all')
   const [sort, setSort] = useState<SortKey>('featured')
   const [showFilters, setShowFilters] = useState(false)
+  const [page, setPage] = useState(1)
 
   // Only surface categories that actually exist in the data.
   const categoryKeys = useMemo(() => {
@@ -31,16 +44,25 @@ export function ProductCatalog({ products }: { products: Product[] }) {
     return known.filter((k) => present.has(k))
   }, [products, t.products.categories])
 
+  // Brand chips come from the catalogue itself, so a new make added in
+  // WordPress appears here without a code change.
+  const brands = useMemo(() => {
+    const labels = new Map<string, string>()
+    for (const p of products) if (p.brand) labels.set(brandKey(p.brand), p.brand.trim())
+    const known = KNOWN_BRANDS.map(brandKey).filter((k) => labels.has(k))
+    const others = Array.from(labels.keys())
+      .filter((k) => !known.includes(k))
+      .sort((a, b) => a.localeCompare(b))
+    return [...known, ...others].map((k) => ({ key: k, label: labels.get(k) as string }))
+  }, [products])
+
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase()
     let list = products.filter((p) => {
-      const inCat = category === 'all' || p.categories.includes(category)
-      if (!inCat) return false
-      if (!q) return true
-      const haystack = [pick(p.name, locale), p.name.he, p.name.en, p.brand, p.sku, p.searchBlob]
-        .join(' ')
-        .toLowerCase()
-      return haystack.includes(q)
+      if (category !== 'all' && !p.categories.includes(category)) return false
+      if (brand !== 'all' && brandKey(p.brand) !== brand) return false
+      // Prefix + synonym matching in all three languages; the OE number is
+      // compared by hash only, so it never appears in the page.
+      return matchesQuery(p.searchText, query, p.searchHashes)
     })
 
     list = [...list].sort((a, b) => {
@@ -56,12 +78,26 @@ export function ProductCatalog({ products }: { products: Product[] }) {
       }
     })
     return list
-  }, [products, query, category, sort, locale])
+  }, [products, query, category, brand, sort, locale])
 
-  const hasActiveFilters = query || category !== 'all'
+  // Any change to the filters starts again from the first page.
+  useEffect(() => {
+    setPage(1)
+  }, [query, category, brand, sort])
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
+  const safePage = Math.min(page, totalPages)
+  const visible = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE)
+
+  const goToPage = (next: number) => {
+    setPage(Math.min(totalPages, Math.max(1, next)))
+    document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  const hasActiveFilters = query || category !== 'all' || brand !== 'all'
 
   return (
-    <div className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
+    <div id="catalog" className="mx-auto max-w-7xl scroll-mt-24 px-4 pb-24 sm:px-6 lg:px-8">
       <div className="sticky top-16 z-30 -mx-4 mb-8 border-b border-border bg-background/90 px-4 py-4 backdrop-blur-md sm:top-20 sm:mx-0 sm:rounded-2xl sm:border sm:px-5">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
           <div className="relative flex-1">
@@ -102,21 +138,40 @@ export function ProductCatalog({ products }: { products: Product[] }) {
           </div>
         </div>
 
-        <div className={cn('mt-3 flex-wrap gap-2', showFilters ? 'flex' : 'hidden lg:flex')}>
-          <CategoryChip active={category === 'all'} onClick={() => setCategory('all')}>
-            {t.common.all}
-          </CategoryChip>
-          {categoryKeys.map((key) => (
-            <CategoryChip key={key} active={category === key} onClick={() => setCategory(key)}>
-              {(t.products.categories as Record<string, string>)[key]}
-            </CategoryChip>
-          ))}
+        <div className={cn('mt-3 flex-col gap-3', showFilters ? 'flex' : 'hidden lg:flex')}>
+          {brands.length > 1 ? (
+            <div className="flex flex-wrap items-center gap-2" role="group" aria-label={t.productsFilters.brandsLabel}>
+              <span className="me-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t.productsFilters.brandsLabel}</span>
+              <FilterChip active={brand === 'all'} onClick={() => setBrand('all')}>
+                {t.productsFilters.allBrands}
+              </FilterChip>
+              {brands.map((b) => (
+                <FilterChip key={b.key} active={brand === b.key} onClick={() => setBrand(b.key)}>
+                  {b.label}
+                </FilterChip>
+              ))}
+            </div>
+          ) : null}
+          <div className="flex flex-wrap items-center gap-2" role="group" aria-label={t.products.categoriesLabel}>
+            <span className="me-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t.products.categoriesLabel}</span>
+            <FilterChip active={category === 'all'} onClick={() => setCategory('all')}>
+              {t.common.all}
+            </FilterChip>
+            {categoryKeys.map((key) => (
+              <FilterChip key={key} active={category === key} onClick={() => setCategory(key)}>
+                {(t.products.categories as Record<string, string>)[key]}
+              </FilterChip>
+            ))}
+          </div>
         </div>
       </div>
 
       <div className="mb-6 flex items-center justify-between gap-4">
         <p className="text-sm text-muted-foreground">
           <span className="font-semibold text-foreground">{filtered.length}</span> {t.common.resultsCount}
+          {totalPages > 1 ? (
+            <span className="ms-2 text-xs">· {t.productsFilters.perPageNote.replace('{count}', String(PAGE_SIZE))}</span>
+          ) : null}
         </p>
         {hasActiveFilters ? (
           <button
@@ -124,6 +179,7 @@ export function ProductCatalog({ products }: { products: Product[] }) {
             onClick={() => {
               setQuery('')
               setCategory('all')
+              setBrand('all')
             }}
             className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline"
           >
@@ -139,38 +195,93 @@ export function ProductCatalog({ products }: { products: Product[] }) {
         </div>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {filtered.map((product, i) => (
+          {visible.map((product, i) => (
             <Reveal key={product.slug} delay={Math.min(i, 8) * 60}>
               <ProductCard product={product} />
             </Reveal>
           ))}
         </div>
       )}
+
+      {totalPages > 1 ? (
+        <Paginator current={safePage} total={totalPages} onChange={goToPage} prevLabel={t.common.prevPage} nextLabel={t.common.nextPage} />
+      ) : null}
     </div>
   )
 }
 
-function CategoryChip({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean
-  onClick: () => void
-  children: React.ReactNode
-}) {
+function FilterChip({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
     <button
       type="button"
       onClick={onClick}
+      aria-pressed={active}
       className={cn(
         'rounded-full border px-4 py-1.5 text-sm font-medium transition-colors',
-        active
-          ? 'border-primary bg-primary text-primary-foreground'
-          : 'border-border bg-card text-muted-foreground hover:border-accent hover:text-accent',
+        active ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-card text-muted-foreground hover:border-accent hover:text-accent',
       )}
     >
       {children}
     </button>
+  )
+}
+
+/** Page numbers with the ends always visible and an ellipsis for the gaps. */
+function pageItems(current: number, total: number): (number | '…')[] {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1)
+  const pages = new Set<number>([1, total, current - 1, current, current + 1])
+  const sorted = Array.from(pages)
+    .filter((p) => p >= 1 && p <= total)
+    .sort((a, b) => a - b)
+  const out: (number | '…')[] = []
+  for (let i = 0; i < sorted.length; i++) {
+    if (i > 0 && sorted[i] - sorted[i - 1] > 1) out.push('…')
+    out.push(sorted[i])
+  }
+  return out
+}
+
+function Paginator({ current, total, onChange, prevLabel, nextLabel }: { current: number; total: number; onChange: (page: number) => void; prevLabel: string; nextLabel: string }) {
+  return (
+    <nav className="mt-12 flex flex-wrap items-center justify-center gap-2" aria-label="pagination">
+      <button
+        type="button"
+        onClick={() => onChange(current - 1)}
+        disabled={current <= 1}
+        className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium transition-colors hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        <ChevronRight className="size-4 flip-x" aria-hidden />
+        {prevLabel}
+      </button>
+      {pageItems(current, total).map((item, i) =>
+        item === '…' ? (
+          <span key={`gap-${i}`} className="px-1 text-muted-foreground" aria-hidden>
+            …
+          </span>
+        ) : (
+          <button
+            key={item}
+            type="button"
+            onClick={() => onChange(item)}
+            aria-current={item === current ? 'page' : undefined}
+            className={cn(
+              'grid size-10 place-items-center rounded-full border text-sm font-semibold transition-colors',
+              item === current ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-card hover:border-accent hover:text-accent',
+            )}
+          >
+            <span dir="ltr">{item}</span>
+          </button>
+        ),
+      )}
+      <button
+        type="button"
+        onClick={() => onChange(current + 1)}
+        disabled={current >= total}
+        className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium transition-colors hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        {nextLabel}
+        <ChevronLeft className="size-4 flip-x" aria-hidden />
+      </button>
+    </nav>
   )
 }

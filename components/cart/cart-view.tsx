@@ -2,7 +2,10 @@
 
 import Link from '@/components/localized-link'
 import Image from 'next/image'
-import { Minus, Plus, ShoppingCart, Trash2, MessageCircle, Package } from 'lucide-react'
+import { useSearchParams } from 'next/navigation'
+import { useFormStatus } from 'react-dom'
+import { AlertCircle, ArrowRight, Loader2, Minus, Plus, ShoppingCart, Trash2, MessageCircle, Package } from 'lucide-react'
+import { prepareCheckoutAction } from '@/lib/checkout/actions'
 import { useLanguage } from '@/lib/i18n/context'
 import { useCart } from '@/lib/cart-context'
 import { PageHeader } from '@/components/page-header'
@@ -14,10 +17,50 @@ function priceValue(price: string | null): number {
   return Number.isFinite(n) ? n : 0
 }
 
+/**
+ * Split into its own component because `useFormStatus` only reports the status
+ * of the form it is rendered inside. Without a pending state the button would
+ * stay clickable and silent while the server action rebuilds the WooCommerce
+ * basket, which reads as "nothing happened".
+ */
+function CheckoutSubmit({ label, pendingLabel }: { label: string; pendingLabel: string }) {
+  const { pending } = useFormStatus()
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      aria-busy={pending}
+      className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-progress disabled:opacity-70"
+    >
+      {pending ? (
+        <>
+          <Loader2 className="size-4 animate-spin" aria-hidden />
+          {pendingLabel}
+        </>
+      ) : (
+        <>
+          {label}
+          <ArrowRight className="size-4 flip-x" aria-hidden />
+        </>
+      )}
+    </button>
+  )
+}
+
 export function CartView({ whatsapp }: { whatsapp: string }) {
   const { t, locale } = useLanguage()
   const { items, setQty, remove, clear } = useCart()
   const wa = whatsapp.replace(/[^\d]/g, '')
+  // The server action redirects back here with this flag when WooCommerce
+  // could not be handed the basket, so the failure is visible, not silent.
+  const checkoutStatus = useSearchParams().get('checkout')
+  const checkoutFailed = checkoutStatus === 'unavailable'
+  const checkoutExpired = checkoutStatus === 'expired'
+  // Only lines that carry a WooCommerce id can be handed to checkout.
+  const checkoutItems = items
+    .filter((i) => Number.isInteger(i.wooId) && i.wooId > 0)
+    .map((i) => `${i.wooId}:${i.quantity}`)
+    .join(',')
 
   const subtotal = items.reduce((sum, i) => sum + priceValue(i.price) * i.quantity, 0)
   const hasPricing = items.some((i) => priceValue(i.price) > 0)
@@ -124,16 +167,39 @@ export function CartView({ whatsapp }: { whatsapp: string }) {
           </dl>
           <p className="mt-3 text-xs text-muted-foreground">{t.cart.shippingNote}</p>
 
+          {checkoutFailed ? (
+            <p role="alert" className="mt-5 flex items-start gap-2.5 rounded-2xl bg-destructive/10 p-4 text-sm leading-relaxed text-destructive">
+              <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden />
+              {t.cart.checkoutUnavailable}
+            </p>
+          ) : null}
+          {checkoutExpired ? (
+            <p role="status" className="mt-5 flex items-start gap-2.5 rounded-2xl bg-secondary p-4 text-sm leading-relaxed text-muted-foreground">
+              <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden />
+              {t.cart.checkoutExpired}
+            </p>
+          ) : null}
+
+          {/* The server action rebuilds the WooCommerce basket on a-f.site and
+              redirects to /checkout, proxied on this same origin. */}
+          {checkoutItems ? (
+            <form action={prepareCheckoutAction}>
+              <input type="hidden" name="items" value={checkoutItems} />
+              <input type="hidden" name="locale" value={locale} />
+              <CheckoutSubmit label={t.cart.checkout} pendingLabel={t.cart.checkoutPending} />
+            </form>
+          ) : null}
+          <p className="mt-3 text-center text-xs text-muted-foreground">{t.cart.checkoutNote}</p>
+
           <a
             href={`https://wa.me/${wa}?text=${encodeURIComponent(buildWhatsapp())}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-semibold text-white transition-transform hover:scale-[1.02]"
+            className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#25D366] px-6 py-3 text-sm font-semibold text-[#128C7E] transition-colors hover:bg-[#25D366]/10"
           >
             <MessageCircle className="size-4" aria-hidden />
             {t.cart.orderViaWhatsapp}
           </a>
-          <p className="mt-3 text-center text-xs text-muted-foreground">{t.cart.checkoutNote}</p>
         </aside>
       </section>
     </>

@@ -1,6 +1,7 @@
 import { wpQuery } from './client'
 import { asArray, cleanPrice, estimateReadMinutes, first, localized, stripHtml } from './format'
 import type { Product, Spec } from './types'
+import { buildHaystack, hashToken } from '@/lib/search/match'
 
 const SPEC_FIELDS = Array.from({ length: 8 }, (_, i) => {
   const n = i + 1
@@ -68,7 +69,7 @@ function normalize(raw: RawProduct): Product {
   return {
     slug: raw.slug,
     wooId: raw.databaseId,
-    sku: acf.sku ? String(acf.sku) : String(acf.oeNumber ?? ''),
+    sku: acf.sku ? String(acf.sku) : '',
     brand: acf.brand ? String(acf.brand) : '',
     categories: asArray(acf.partCategory).concat(
       (raw.productCategories?.nodes ?? []).map((n) => n.slug),
@@ -84,10 +85,10 @@ function normalize(raw: RawProduct): Product {
       .filter((u): u is string => !!u),
     specs,
     compat,
-    searchBlob: [acf.searchTerms, acf.oeNumber, acf.brand, raw.name, acf.nameEn, acf.nameAr]
-      .filter(Boolean)
-      .join(' ')
-      .toLowerCase(),
+    // The OE number is a trade secret: only its hash is shipped, and the
+    // browser hashes what the customer types to compare (see lib/search/match).
+    searchText: buildHaystack([raw.name, acf.nameHe, acf.nameEn, acf.nameAr, acf.brand, acf.sku, acf.searchTerms, ...compat]),
+    searchHashes: acf.oeNumber ? [hashToken(String(acf.oeNumber))] : [],
   }
 }
 

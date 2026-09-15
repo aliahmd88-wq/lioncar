@@ -1,7 +1,8 @@
 'use client'
 
-import { useLanguage } from '@/lib/i18n/language-context'
+import { useLanguage } from '@/lib/i18n/context'
 import { serializeJsonLd } from '@/lib/json-ld'
+import { SectionHeading } from '@/components/section-heading'
 
 const FAQ_KEYS = [1, 2, 3, 4, 5, 6, 7] as const
 
@@ -10,7 +11,7 @@ const FAQ_KEYS = [1, 2, 3, 4, 5, 6, 7] as const
  * search engines and AI assistants can quote the answers directly. Native
  * <details> keeps it accessible and needs no JavaScript to open.
  */
-export function FaqSection() {
+export function HomeFaq() {
   const { t } = useLanguage()
   const items = FAQ_KEYS.map((n) => ({
     question: t.faq.items[`q${n}` as keyof typeof t.faq.items],
@@ -18,7 +19,8 @@ export function FaqSection() {
   }))
 
   return (
-    <section id="faq" className="mx-auto max-w-4xl px-4 py-20 md:px-6 md:py-28">
+    <section id="faq" className="border-t border-border bg-secondary/40">
+      <div className="mx-auto max-w-4xl px-4 py-20 sm:px-6 lg:px-8">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -33,15 +35,11 @@ export function FaqSection() {
           }),
         }}
       />
-      <p className="text-xs font-semibold uppercase tracking-[0.28em] text-accent">{t.faq.eyebrow}</p>
-      <h2 className="mt-3 text-balance font-serif text-3xl leading-tight tracking-tight text-foreground md:text-4xl">
-        {t.faq.title}
-      </h2>
-      <p className="mt-4 max-w-2xl text-pretty leading-relaxed text-muted-foreground">{t.faq.lead}</p>
+      <SectionHeading eyebrow={t.faq.eyebrow} title={t.faq.title} lead={t.faq.lead} />
       <div className="mt-10 divide-y divide-border rounded-3xl border border-border bg-card">
         {items.map((item, index) => (
           <details key={index} className="group px-6 py-5" open={index === 0}>
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-start text-base font-semibold text-foreground [&::-webkit-details-marker]:hidden">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-start font-serif text-base font-bold text-foreground [&::-webkit-details-marker]:hidden">
               {item.question}
               <span aria-hidden="true" className="text-xl leading-none text-accent transition-transform group-open:rotate-45">
                 +
@@ -50,6 +48,7 @@ export function FaqSection() {
             <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">{item.answer}</p>
           </details>
         ))}
+      </div>
       </div>
     </section>
   )

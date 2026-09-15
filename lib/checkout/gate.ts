@@ -16,21 +16,19 @@
  */
 
 /** localStorage key holding the storefront cart. */
-export const CART_STORAGE_KEY = 'alifleet-cart'
+export const CART_STORAGE_KEY = 'lioncar_cart_v1'
 
 /** Total quantity currently held by the client cart. Written in the browser. */
-export const CART_QUANTITY_COOKIE = 'alifleet-cart-quantity'
+export const CART_QUANTITY_COOKIE = 'lioncar-cart-quantity'
 
 /** Total quantity the last handoff pushed into WooCommerce. httpOnly. */
-export const HANDOFF_QUANTITY_COOKIE = 'alifleet-checkout-quantity'
+export const HANDOFF_QUANTITY_COOKIE = 'lioncar-checkout-quantity'
 
 /** WooCommerce session and basket cookies proxied on the storefront origin. */
 export function isWooStateCookie(name: string) {
   return (
-    // This signed cookie is not a WooCommerce cookie by name, but WordPress
-    // uses it to restore the handed-off customer on every checkout request.
-    // Keeping it after Next.js logout re-authenticated the previous customer
-    // inside WooCommerce and leaked their name/e-mail to guest checkout (RT-12).
+    // Issued by the shared WordPress backend (a-f.site) for signed-in
+    // customers. Lion Car checks out as a guest, so it is only ever cleared.
     name === 'alifleet_customer_handoff' ||
     name === 'woocommerce_cart_hash' ||
     name === 'woocommerce_items_in_cart' ||

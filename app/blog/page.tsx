@@ -12,6 +12,6 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function BlogPage() {
-  const posts = await getPosts()
+  const posts = await getPosts(await readLocale())
   return <BlogView posts={posts} />
 }

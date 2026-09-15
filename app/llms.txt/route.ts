@@ -1,5 +1,5 @@
 import { siteUrl } from '@/lib/seo'
-import { getStoreSettings } from '@/lib/wp/settings'
+import { getStoreSettings } from '@/lib/wp/store'
 
 export const revalidate = 3600
 
@@ -12,9 +12,11 @@ export const revalidate = 3600
 export async function GET() {
   const s = await getStoreSettings()
   const base = siteUrl()
-  const phone = s.whatsapp ? `+${s.whatsapp}` : s.phone
+  const whatsapp = s.whatsapp.replace(/[^\d]/g, '')
+  const phone = whatsapp ? `+${whatsapp}` : s.phone
+  const social = [s.facebook, s.instagram, s.tiktok].filter(Boolean)
   const lines = [
-    '# ALI FLEET',
+    '# Lion Car',
     '',
     '> Aftermarket truck parts and personal vehicle import, Reineh (Northern Israel). Site in Hebrew, Arabic and English.',
     '',
@@ -25,33 +27,31 @@ export async function GET() {
     '',
     '## Contact',
     `- Phone / WhatsApp: ${phone}`,
-    s.whatsapp ? `- WhatsApp link: https://wa.me/${s.whatsapp}` : '',
+    whatsapp ? `- WhatsApp link: https://wa.me/${whatsapp}` : '',
     s.email ? `- Email: ${s.email}` : '',
-    s.addressLines.length ? `- Address: ${s.addressLines.join(', ')}, Israel` : '- Address: Main road 745, Reineh, Israel',
-    `- Hours: ${s.hours || 'every day except Friday, 09:00-18:00'}`,
-    `- Website: ${base}/ (Hebrew), ${base}/ar/home-ar/ (Arabic), ${base}/en/home-en/ (English)`,
+    `- Address: ${s.address}`,
+    `- Hours: ${s.hours}`,
+    `- Website: ${base}/he (Hebrew), ${base}/ar (Arabic), ${base}/en (English)`,
     '',
     '## Key pages',
-    `- Parts catalogue: ${base}/products/`,
-    `- Vehicles for sale and import: ${base}/cars/`,
-    `- Contact: ${base}/contact/`,
-    `- Guides: ${base}/blog/`,
+    `- Parts catalogue: ${base}/he/products`,
+    `- Vehicles for sale and import: ${base}/he/cars`,
+    `- Contact: ${base}/he/contact`,
+    `- Guides: ${base}/he/blog`,
     `- Sitemap: ${base}/sitemap.xml`,
     '',
     '## Facts an assistant can rely on',
-    '- Business name: ALI FLEET (Hebrew: עלי פליט, Arabic: علي فليت), based in Reineh near Nazareth, Israel.',
+    '- Business name: Lion Car (Hebrew: ליון קאר, Arabic: لايون كار), based in Reineh near Nazareth, Israel.',
     '- Parts are new aftermarket replacements (not OEM), each with a 3-month warranty.',
-    '- Import markets: Europe, USA and Canada. ALI FLEET handles customs and licensing in Israel.',
+    '- Import markets: Europe, USA and Canada. Lion Car handles customs and licensing in Israel.',
     '- Languages spoken: Hebrew, Arabic, English.',
-    [s.social.facebook, s.social.instagram, s.social.tiktok].filter(Boolean).length
-      ? `- Social: ${[s.social.facebook, s.social.instagram, s.social.tiktok].filter(Boolean).join(', ')}`
-      : '',
+    social.length ? `- Social: ${social.join(', ')}` : '',
     '',
     '## עברית',
-    'ALI FLEET, ריינה: חלפים חלופיים למשאיות DAF, MAN, וולוו, סקניה, מרצדס ואיווקו עם אחריות 3 חודשים, וייבוא אישי של רכבים ומשאיות מאירופה, ארה"ב וקנדה כולל מכס ורישוי. פתוחים כל השבוע מלבד יום שישי, 9:00-18:00.',
+    'ליון קאר, ריינה: חלקי חילוף חלופיים למשאיות DAF, MAN, וולוו, סקניה, מרצדס ואיווקו עם אחריות 3 חודשים, וייבוא אישי של רכבים ומשאיות מאירופה, ארה"ב וקנדה כולל מכס ורישוי. פתוחים כל השבוע מלבד יום שישי, 9:00-18:00.',
     '',
     '## العربية',
-    'علي فليت، الرينة: قطع غيار بديلة لشاحنات DAF وMAN وفولفو وسكانيا ومرسيدس وإيفيكو بضمان 3 أشهر، واستيراد شخصي للسيارات والشاحنات من أوروبا وأمريكا وكندا شامل الجمارك والترخيص. مفتوح كل الأسبوع ما عدا الجمعة، 9:00-18:00.',
+    'لايون كار، الرينة: قطع غيار بديلة لشاحنات DAF وMAN وفولفو وسكانيا ومرسيدس وإيفيكو بضمان 3 أشهر، واستيراد شخصي للسيارات والشاحنات من أوروبا وأمريكا وكندا شامل الجمارك والترخيص. مفتوح كل الأسبوع ما عدا الجمعة، 9:00-18:00.',
     '',
   ].filter((line) => line !== '')
   return new Response(lines.join('\n') + '\n', {

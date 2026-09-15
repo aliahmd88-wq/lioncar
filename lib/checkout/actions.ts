@@ -2,16 +2,9 @@
 
 import { cookies, headers } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { getAuthToken } from '@/lib/auth/session'
 import { isLocale, type Locale } from '@/lib/i18n/config'
 import { isWpConfigured, wpStoreOrigin } from '@/lib/wp/config'
-import {
-  createWooSessionHandoff,
-  fetchWooUpstream,
-  frontendOrigin,
-  mergeCookies,
-  localeForRequest,
-} from './proxy'
+import { fetchWooUpstream, frontendOrigin, localeForRequest } from './proxy'
 import { HANDOFF_QUANTITY_COOKIE, isWooStateCookie } from './gate'
 
 function readText(formData: FormData, key: string) {
@@ -117,47 +110,37 @@ async function requestFromAction() {
   return new Request(`${protocol}://${parsedHost.host}/checkout`, { headers: proxied })
 }
 
+/**
+ * Lion Car has no customer accounts: every order is a guest checkout. The
+ * basket is rebuilt inside WooCommerce from the WooCommerce product ids the
+ * cart holds, then the customer is sent to the proxied /checkout page.
+ */
 export async function prepareCheckoutAction(formData: FormData) {
-  if (!isWpConfigured()) redirect('/cart?checkout=unavailable')
-
   const request = await requestFromAction()
   const locale = localeFromForm(formData, request)
+  const cartUrl = (status: string) => `/${locale}/cart?checkout=${status}`
+  if (!isWpConfigured()) redirect(cartUrl('unavailable'))
+
   const { items, quantity: handedOffQuantity } = itemsQuery(formData)
   const cmsOrigin = wpStoreOrigin()
-  if (!cmsOrigin) redirect('/cart?checkout=unavailable')
+  if (!cmsOrigin) redirect(cartUrl('unavailable'))
 
   const cookieStore = await cookies()
-  const authToken = await getAuthToken()
 
-  // A guest must never inherit a previous customer's WooCommerce session.
-  // The Next.js JWT remains untouched; only WooCommerce proxy cookies are cleared.
-  if (!authToken) {
-    for (const { name } of cookieStore.getAll()) {
-      if (isWooStateCookie(name)) cookieStore.delete(name)
-    }
+  // A guest must never inherit a previous visitor's WooCommerce session, so
+  // every proxied WooCommerce cookie is dropped before the basket is rebuilt.
+  for (const { name } of cookieStore.getAll()) {
+    if (isWooStateCookie(name)) cookieStore.delete(name)
   }
 
   // Build the upstream header independently of mutation semantics in Next's
-  // cookie store. In particular, a guest request must never forward either a
-  // WooCommerce session or the signed customer handoff, even if a runtime still
-  // exposes a cookie in getAll() after delete() scheduled its response expiry.
-  let cookieHeader = cookieStore
+  // cookie store: a runtime may still expose a cookie in getAll() after
+  // delete() scheduled its response expiry.
+  const cookieHeader = cookieStore
     .getAll()
-    .filter(({ name }) => Boolean(authToken) || !isWooStateCookie(name))
+    .filter(({ name }) => !isWooStateCookie(name))
     .map(({ name, value }) => `${name}=${value}`)
     .join('; ')
-
-  if (authToken) {
-    // A failed handoff must not abort checkout: the customer can still order as
-    // a guest, and throwing here surfaced as a blank error screen instead (QA-07).
-    try {
-      const handoffCookies = await createWooSessionHandoff(request, authToken, locale)
-      cookieHeader = mergeCookies(cookieHeader, handoffCookies)
-      for (const cookie of handoffCookies) storeProxyCookie(cookieStore, cookie, request)
-    } catch (error) {
-      console.error('[alifleet] checkout session handoff failed', error)
-    }
-  }
 
   let cartResponse: Response
   try {
@@ -175,13 +158,13 @@ export async function prepareCheckoutAction(formData: FormData) {
       }
     )
   } catch (error) {
-    console.error('[alifleet] cart handoff request failed', error)
-    redirect('/cart?checkout=unavailable')
+    console.error('[lioncar] cart handoff request failed', error)
+    redirect(cartUrl('unavailable'))
   }
 
   if (!(cartResponse.status >= 300 && cartResponse.status < 400)) {
-    console.error('[alifleet] cart handoff returned', cartResponse.status)
-    redirect('/cart?checkout=unavailable')
+    console.error('[lioncar] cart handoff returned', cartResponse.status)
+    redirect(cartUrl('unavailable'))
   }
 
   // WordPress sends the customer to the cart page when nothing in the basket
@@ -198,7 +181,7 @@ export async function prepareCheckoutAction(formData: FormData) {
     // off. Drop any earlier marker rather than leaving one that would let a
     // stale WooCommerce session render at /checkout.
     cookieStore.delete(HANDOFF_QUANTITY_COOKIE)
-    redirect('/cart?checkout=unavailable')
+    redirect(cartUrl('unavailable'))
   }
 
   // Record what was actually pushed. /checkout compares this with the quantity

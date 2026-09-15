@@ -24,8 +24,10 @@ export type Product = {
   gallery: string[]
   specs: Spec[]
   compat: string[]
-  /** Hidden search haystack: OE numbers and search terms. Never rendered. */
-  searchBlob: string
+  /** Words the part can be found by (names, brand, SKU, models, hidden search terms). Never rendered. */
+  searchText: string[]
+  /** cyrb53 hashes of hidden search keys (the OE number); the number itself never leaves the server. */
+  searchHashes: string[]
 }
 
 export type VehicleKind = 'import' | 'sale'
@@ -71,6 +73,8 @@ export type StoreSettings = {
   email: string
   hours: string
   address: string
+  /** Street and locality as separate lines, for structured data. */
+  addressLines: string[]
   /** WooCommerce origin that owns checkout (https://a-f.site). */
   storeUrl: string
   facebook: string | null
