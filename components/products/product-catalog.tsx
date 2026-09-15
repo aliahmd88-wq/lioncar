@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { ChevronLeft, ChevronRight, Search, SlidersHorizontal, X } from 'lucide-react'
 import { useLanguage } from '@/lib/i18n/context'
 import { ProductCard } from '@/components/product-card'
@@ -29,9 +30,11 @@ function brandKey(value: string) {
 
 export function ProductCatalog({ products }: { products: Product[] }) {
   const { t, locale } = useLanguage()
-  const [query, setQuery] = useState('')
+  // The home header's search box and brand chips land here with ?q= / ?brand=.
+  const params = useSearchParams()
+  const [query, setQuery] = useState(params.get('q') ?? '')
   const [category, setCategory] = useState<string>('all')
-  const [brand, setBrand] = useState<string>('all')
+  const [brand, setBrand] = useState<string>(brandKey(params.get('brand') ?? '') || 'all')
   const [sort, setSort] = useState<SortKey>('featured')
   const [showFilters, setShowFilters] = useState(false)
   const [page, setPage] = useState(1)

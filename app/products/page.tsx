@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { getProducts } from '@/lib/wp/products'
 import { ProductsView } from '@/components/products/products-view'
 import { getDictionary } from '@/lib/i18n'
@@ -13,5 +14,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ProductsPage() {
   const products = await getProducts()
-  return <ProductsView products={products} />
+  return (
+    <Suspense>
+      <ProductsView products={products} />
+    </Suspense>
+  )
 }

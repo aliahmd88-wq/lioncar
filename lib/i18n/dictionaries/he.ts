@@ -70,6 +70,16 @@ export const he: Dictionary = {
     heroPause: 'השהיית מצגת הרכבים',
     heroPlay: 'הפעלת מצגת הרכבים',
     heroView: 'הצגה',
+    heroStore: {
+      storeTitle: 'החנות של Lion Car',
+      searchPlaceholder: 'חיפוש לפי מספר חלק, דגם או יצרן…',
+      searchButton: 'חיפוש',
+      partsInStock: 'חלקים במלאי',
+      carsInStock: 'רכבים במלאי',
+      viewAll: 'לכל הפריטים',
+      newTag: 'בהזמנה',
+      usedTag: 'במלאי',
+    },
     stats: {
       eyebrow: 'Lion Car במספרים',
       customers: 'לקוחות מרוצים',

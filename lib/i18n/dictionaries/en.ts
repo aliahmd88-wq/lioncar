@@ -68,6 +68,16 @@ export const en = {
     heroPause: 'Pause vehicle slideshow',
     heroPlay: 'Play vehicle slideshow',
     heroView: 'View',
+    heroStore: {
+      storeTitle: 'Lion Car store',
+      searchPlaceholder: 'Search by part number, model or make…',
+      searchButton: 'Search',
+      partsInStock: 'Parts in stock',
+      carsInStock: 'Vehicles in stock',
+      viewAll: 'View all',
+      newTag: 'To order',
+      usedTag: 'In stock',
+    },
     stats: {
       eyebrow: 'Lion Car in numbers',
       customers: 'Customers served',

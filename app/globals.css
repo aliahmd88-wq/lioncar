@@ -135,3 +135,18 @@
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+
+/* Inventory strips inside the home header: one seamless loop of duplicated
+   cards, paused while the visitor hovers or focuses a card. On phones and
+   with reduced motion they become a plain swipeable row. */
+.hero-strip-track { animation: hero-strip 70s linear infinite; }
+.hero-strip-reverse { animation-direction: reverse; }
+.hero-strip:hover .hero-strip-track,
+.hero-strip:focus-within .hero-strip-track { animation-play-state: paused; }
+@keyframes hero-strip { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (max-width: 767px), (prefers-reduced-motion: reduce) {
+  .hero-strip { overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .hero-strip-track { animation: none; }
+  .hero-strip-track > * { scroll-snap-align: start; }
+  .hero-strip-duplicate { display: none; }
+}

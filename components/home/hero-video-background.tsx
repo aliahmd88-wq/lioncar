@@ -17,8 +17,9 @@ const SCENE_MS = 8000
 // so the two videos are never blended on top of each other.
 const FADE_MS = 700
 
-export function HeroVideoBackground() {
+export function HeroVideoBackground({ count = 2 }: { count?: 1 | 2 }) {
   const { t } = useLanguage()
+  const scenes = SCENES.slice(0, count)
   const [useVideo, setUseVideo] = useState(false)
   const [active, setActive] = useState(0)
   const [visible, setVisible] = useState(true)
@@ -42,12 +43,12 @@ export function HeroVideoBackground() {
   // Switch scenes one at a time: fade the current one out to black, then
   // bring the next one in. The two videos are never shown together.
   useEffect(() => {
-    if (!useVideo || paused) return
+    if (!useVideo || paused || scenes.length < 2) return
     let fadeTimer: number
     const interval = window.setInterval(() => {
       setVisible(false)
       fadeTimer = window.setTimeout(() => {
-        setActive((current) => (current + 1) % SCENES.length)
+        setActive((current) => (current + 1) % scenes.length)
         setVisible(true)
       }, FADE_MS)
     }, SCENE_MS)
@@ -55,7 +56,7 @@ export function HeroVideoBackground() {
       window.clearInterval(interval)
       window.clearTimeout(fadeTimer)
     }
-  }, [useVideo, paused])
+  }, [useVideo, paused, scenes.length])
 
   // Keep playback state in sync with the pause control.
   useEffect(() => {
@@ -70,7 +71,7 @@ export function HeroVideoBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden bg-secondary" aria-hidden={!useVideo}>
       {useVideo ? (
-        SCENES.map((scene, i) => (
+        scenes.map((scene, i) => (
           <video
             key={scene.src}
             ref={(node) => {
@@ -90,7 +91,7 @@ export function HeroVideoBackground() {
         ))
       ) : (
         <img
-          src={SCENES[0].poster || '/placeholder.svg'}
+          src={scenes[0].poster || '/placeholder.svg'}
           alt=""
           className="absolute inset-0 size-full object-cover"
         />

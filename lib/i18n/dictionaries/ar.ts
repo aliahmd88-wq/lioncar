@@ -70,6 +70,16 @@ export const ar: Dictionary = {
     heroPause: 'إيقاف عرض المركبات مؤقتًا',
     heroPlay: 'تشغيل عرض المركبات',
     heroView: 'عرض',
+    heroStore: {
+      storeTitle: 'متجر Lion Car',
+      searchPlaceholder: 'ابحث برقم القطعة أو الموديل أو الماركة…',
+      searchButton: 'بحث',
+      partsInStock: 'قطع في المخزن',
+      carsInStock: 'مركبات في المخزن',
+      viewAll: 'عرض الكل',
+      newTag: 'بالطلب',
+      usedTag: 'في المخزن',
+    },
     stats: {
       eyebrow: 'لايون كار بالأرقام',
       customers: 'عميل يثق بنا',
