@@ -694,6 +694,13 @@ export const he: Dictionary = {
     areaServed: 'ישראל',
     openingHoursText: 'כל יום מלבד יום שישי, 09:00–18:00',
   },
+  notFound: {
+    eyebrow: '404',
+    title: 'הדף הזה לא נמצא',
+    lead: 'ייתכן שהקישור השתנה או שהדף הוסר. החלפים והרכבים שלנו עדיין כאן.',
+    home: 'לדף הבית',
+    parts: 'לקטלוג החלפים',
+  },
   productsFilters: {
     brandsLabel: 'יצרן המשאית',
     allBrands: 'כל היצרנים',

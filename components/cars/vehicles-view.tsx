@@ -80,8 +80,8 @@ export function VehiclesView({ importCars, saleCars }: { importCars: Vehicle[]; 
                 className={cn(
                   'rounded-full border px-4 py-1.5 text-sm font-medium transition-colors',
                   category === c.key
-                    ? 'border-accent bg-accent/10 text-accent'
-                    : 'border-border bg-card text-muted-foreground hover:border-accent hover:text-accent',
+                    ? 'border-primary bg-primary/10 text-primary'
+                    : 'border-border bg-card text-muted-foreground hover:border-primary hover:text-primary',
                 )}
               >
                 {c.label}

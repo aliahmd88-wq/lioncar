@@ -63,7 +63,7 @@ export function BlogView({ posts }: { posts: BlogPost[] }) {
                     )}
                   </div>
                   <div className="flex flex-col justify-center gap-4 p-8 lg:p-12">
-                    <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-accent">
+                    <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-primary">
                       <span>{t.blog.featured}</span>
                       {catLabel(featured.category) ? <span className="text-muted-foreground">· {catLabel(featured.category)}</span> : null}
                     </div>
@@ -76,7 +76,7 @@ export function BlogView({ posts }: { posts: BlogPost[] }) {
                         {featured.readMinutes} {t.blog.minRead}
                       </span>
                     </div>
-                    <span className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-accent">
+                    <span className="mt-2 inline-flex items-center gap-2 text-sm font-semibold text-primary">
                       {t.blog.readMore}
                       <ArrowUpRight className="size-4" aria-hidden />
                     </span>
@@ -91,7 +91,7 @@ export function BlogView({ posts }: { posts: BlogPost[] }) {
                   <Reveal key={post.slug} delay={Math.min(i, 6) * 70}>
                     <Link
                       href={`/blog/${post.slug}`}
-                      className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-xl hover:shadow-black/5"
+                      className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl hover:shadow-black/5"
                     >
                       <div className="relative aspect-16/10 overflow-hidden bg-secondary">
                         {post.image ? (
@@ -110,7 +110,7 @@ export function BlogView({ posts }: { posts: BlogPost[] }) {
                       </div>
                       <div className="flex flex-1 flex-col gap-3 p-6">
                         {catLabel(post.category) ? (
-                          <span className="text-xs font-semibold uppercase tracking-wider text-accent">{catLabel(post.category)}</span>
+                          <span className="text-xs font-semibold uppercase tracking-wider text-primary">{catLabel(post.category)}</span>
                         ) : null}
                         <h3 className="line-clamp-2 font-serif text-lg font-bold leading-snug">{post.title}</h3>
                         {post.excerpt ? <p className="line-clamp-2 text-sm text-muted-foreground">{post.excerpt}</p> : null}

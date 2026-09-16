@@ -37,7 +37,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
         <div className="absolute inset-x-3 top-3 flex flex-wrap gap-2">
           <span className="rounded-full bg-background/90 px-2.5 py-1 text-xs font-semibold">{statusLabel}</span>
           {vehicle.isTaxi ? (
-            <span className="rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-accent-foreground">
+            <span className="rounded-full bg-primary px-2.5 py-1 text-xs font-semibold text-primary-foreground">
               {t.cars.badgeTaxi}
             </span>
           ) : null}
@@ -50,7 +50,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
             <h3 className="font-serif text-lg font-bold leading-snug">{vehicle.model}</h3>
             {subtitle ? <p className="mt-0.5 text-sm text-muted-foreground line-clamp-1">{subtitle}</p> : null}
           </div>
-          <ArrowUpRight className="size-5 shrink-0 text-muted-foreground transition-colors group-hover:text-accent" aria-hidden />
+          <ArrowUpRight className="size-5 shrink-0 text-muted-foreground transition-colors group-hover:text-primary" aria-hidden />
         </div>
 
         <ul className="flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-muted-foreground">
@@ -89,7 +89,7 @@ export function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
           </div>
           <Link
             href={href}
-            className="inline-flex items-center gap-1.5 rounded-full border border-border px-3.5 py-2 text-sm font-semibold transition-colors hover:border-accent hover:text-accent"
+            className="inline-flex items-center gap-1.5 rounded-full border border-border px-3.5 py-2 text-sm font-semibold transition-colors hover:border-primary hover:text-primary"
           >
             {t.common.viewDetails}
           </Link>

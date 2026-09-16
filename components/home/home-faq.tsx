@@ -41,7 +41,7 @@ export function HomeFaq() {
           <details key={index} className="group px-6 py-5" open={index === 0}>
             <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-start font-serif text-base font-bold text-foreground [&::-webkit-details-marker]:hidden">
               {item.question}
-              <span aria-hidden="true" className="text-xl leading-none text-accent transition-transform group-open:rotate-45">
+              <span aria-hidden="true" className="text-xl leading-none text-primary transition-transform group-open:rotate-45">
                 +
               </span>
             </summary>

@@ -45,16 +45,21 @@ function normalize(raw: any, locale: Locale, withContent = false): BlogPost {
   }
 }
 
+/** A post counts as published here only when it has an article body; WordPress still holds a few title-only drafts from the old site. */
+function hasBody(raw: any): boolean {
+  return stripHtml(raw?.content ?? '').trim().length > 0
+}
+
 export async function getPosts(locale: Locale = defaultLocale): Promise<BlogPost[]> {
   const query = `
     query Posts {
       posts(first: 24, where: { status: PUBLISH }) {
-        nodes { ${POST_FIELDS} }
+        nodes { ${POST_FIELDS} content }
       }
     }
   `
   const data: any = await wpQuery(query)
-  return (data?.posts?.nodes ?? []).map((n: any) => normalize(n, locale))
+  return (data?.posts?.nodes ?? []).filter(hasBody).map((n: any) => normalize(n, locale))
 }
 
 export async function getPost(slug: string, locale: Locale = defaultLocale): Promise<BlogPost | null> {
@@ -64,6 +69,6 @@ export async function getPost(slug: string, locale: Locale = defaultLocale): Pro
     }
   `
   const data: any = await wpQuery(query, { slug })
-  if (!data?.post) return null
+  if (!data?.post || !hasBody(data.post)) return null
   return normalize(data.post, locale, true)
 }

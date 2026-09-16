@@ -32,7 +32,7 @@ export function ProductDetail({ product, related, whatsapp }: { product: Product
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-      <Link href="/products" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-accent">
+      <Link href="/products" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
         <ArrowRight className="size-4 rotate-180 flip-x" aria-hidden />
         {t.common.backToProducts}
       </Link>
@@ -57,7 +57,7 @@ export function ProductDetail({ product, related, whatsapp }: { product: Product
                   onClick={() => setActiveImage(img)}
                   className={cn(
                     'relative size-20 overflow-hidden rounded-xl border-2 transition-colors',
-                    activeImage === img ? 'border-accent' : 'border-border hover:border-accent/50',
+                    activeImage === img ? 'border-primary' : 'border-border hover:border-primary/50',
                   )}
                 >
                   <Image src={img || '/placeholder.svg'} alt="" fill sizes="80px" className="object-cover" />
@@ -69,7 +69,7 @@ export function ProductDetail({ product, related, whatsapp }: { product: Product
 
         <div className="flex flex-col gap-5">
           {product.brand ? (
-            <span className="text-sm font-semibold uppercase tracking-wider text-accent">{product.brand}</span>
+            <span className="text-sm font-semibold uppercase tracking-wider text-primary">{product.brand}</span>
           ) : null}
           <h1 className="text-balance font-serif text-3xl font-bold leading-tight sm:text-4xl">{name}</h1>
 
@@ -77,7 +77,7 @@ export function ProductDetail({ product, related, whatsapp }: { product: Product
             <span
               className={cn(
                 'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-semibold',
-                product.inStock ? 'bg-accent/10 text-accent' : 'bg-muted text-muted-foreground',
+                product.inStock ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground',
               )}
             >
               <Check className="size-4" aria-hidden />
@@ -115,7 +115,7 @@ export function ProductDetail({ product, related, whatsapp }: { product: Product
                 disabled={!product.inStock}
                 className={cn(
                   'inline-flex flex-1 items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50',
-                  added ? 'bg-accent text-accent-foreground' : 'bg-primary text-primary-foreground hover:bg-primary/90',
+                  added ? 'bg-primary text-primary-foreground' : 'bg-primary text-primary-foreground hover:bg-primary/90',
                 )}
               >
                 {added ? <Check className="size-4" aria-hidden /> : <Plus className="size-4" aria-hidden />}
@@ -127,7 +127,7 @@ export function ProductDetail({ product, related, whatsapp }: { product: Product
               href={wa}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-semibold transition-colors hover:border-accent hover:text-accent"
+              className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-semibold transition-colors hover:border-primary hover:text-primary"
             >
               <MessageCircle className="size-4" aria-hidden />
               {t.productDetail.askAbout}
@@ -135,7 +135,7 @@ export function ProductDetail({ product, related, whatsapp }: { product: Product
           </div>
 
           <p className="flex items-start gap-2 rounded-2xl bg-secondary/60 p-4 text-sm text-muted-foreground">
-            <ShieldCheck className="mt-0.5 size-5 shrink-0 text-accent" aria-hidden />
+            <ShieldCheck className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden />
             {t.productDetail.fitmentNote}
           </p>
 
@@ -148,7 +148,7 @@ export function ProductDetail({ product, related, whatsapp }: { product: Product
       </div>
 
       {product.specs.length > 0 || product.compat.length > 0 ? (
-        <div className="mt-14 grid gap-8 lg:grid-cols-2">
+        <div className="mt-14 grid items-start gap-8 lg:grid-cols-2">
           {product.specs.length > 0 ? (
             <div className="rounded-3xl border border-border bg-card p-6">
               <h2 className="font-serif text-xl font-bold">{t.common.specifications}</h2>

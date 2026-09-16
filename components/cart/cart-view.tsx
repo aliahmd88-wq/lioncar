@@ -111,8 +111,8 @@ export function CartView({ whatsapp }: { whatsapp: string }) {
                 <div className="flex flex-1 flex-col gap-2">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      {item.brand ? <span className="text-xs font-semibold uppercase tracking-wider text-accent">{item.brand}</span> : null}
-                      <Link href={`/products/${item.slug}`} className="block font-serif font-bold leading-snug hover:text-accent">
+                      {item.brand ? <span className="text-xs font-semibold uppercase tracking-wider text-primary">{item.brand}</span> : null}
+                      <Link href={`/products/${item.slug}`} className="block font-serif font-bold leading-snug hover:text-primary">
                         {pick(item.name, locale)}
                       </Link>
                     </div>
@@ -145,7 +145,7 @@ export function CartView({ whatsapp }: { whatsapp: string }) {
           </ul>
 
           <div className="flex items-center justify-between">
-            <Link href="/products" className="text-sm font-medium text-accent hover:underline">
+            <Link href="/products" className="text-sm font-medium text-primary hover:underline">
               {t.cart.continueShopping}
             </Link>
             <button type="button" onClick={clear} className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-destructive">

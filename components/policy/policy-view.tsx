@@ -23,7 +23,7 @@ export function PolicyView({
         {page?.content ? (
           <LocalizedHtml
             value={page.content}
-            className="leading-relaxed text-foreground/90 [&_a]:text-accent [&_a]:underline [&_h2]:mt-8 [&_h2]:font-serif [&_h2]:text-2xl [&_h2]:font-bold [&_h3]:mt-6 [&_h3]:font-serif [&_h3]:text-xl [&_h3]:font-bold [&_li]:mb-2 [&_ol]:my-4 [&_ol]:list-decimal [&_ol]:ps-6 [&_p]:mb-4 [&_ul]:my-4 [&_ul]:list-disc [&_ul]:ps-6"
+            className="leading-relaxed text-foreground/90 [&_a]:text-primary [&_a]:underline [&_h2]:mt-8 [&_h2]:font-serif [&_h2]:text-2xl [&_h2]:font-bold [&_h3]:mt-6 [&_h3]:font-serif [&_h3]:text-xl [&_h3]:font-bold [&_li]:mb-2 [&_ol]:my-4 [&_ol]:list-decimal [&_ol]:ps-6 [&_p]:mb-4 [&_ul]:my-4 [&_ul]:list-disc [&_ul]:ps-6"
           />
         ) : (
           <div className="rounded-3xl border border-dashed border-border py-16 text-center">

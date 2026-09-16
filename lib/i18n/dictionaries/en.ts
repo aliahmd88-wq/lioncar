@@ -701,6 +701,13 @@ export const en = {
     areaServed: 'Israel',
     openingHoursText: 'Every day except Friday, 09:00–18:00',
   },
+  notFound: {
+    eyebrow: '404',
+    title: 'This page could not be found',
+    lead: 'The link may have changed or the page was removed. Our parts and vehicles are still here.',
+    home: 'Back to the home page',
+    parts: 'Browse the parts catalogue',
+  },
   productsFilters: {
     brandsLabel: 'Truck brand',
     allBrands: 'All brands',

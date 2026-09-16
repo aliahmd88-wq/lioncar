@@ -110,7 +110,7 @@ export function ProductCatalog({ products }: { products: Product[] }) {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={t.products.searchPlaceholder}
-              className="w-full rounded-full border border-border bg-card py-2.5 ps-10 pe-4 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-accent"
+              className="w-full rounded-full border border-border bg-card py-2.5 ps-10 pe-4 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-primary"
               aria-label={t.common.search}
             />
           </div>
@@ -122,7 +122,7 @@ export function ProductCatalog({ products }: { products: Product[] }) {
               id="sort"
               value={sort}
               onChange={(e) => setSort(e.target.value as SortKey)}
-              className="rounded-full border border-border bg-card px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent"
+              className="rounded-full border border-border bg-card px-4 py-2.5 text-sm outline-none transition-colors focus:border-primary"
             >
               <option value="featured">{t.common.featured}</option>
               <option value="priceAsc">{t.common.priceAsc}</option>
@@ -184,7 +184,7 @@ export function ProductCatalog({ products }: { products: Product[] }) {
               setCategory('all')
               setBrand('all')
             }}
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
           >
             <X className="size-4" aria-hidden />
             {t.common.clearFilters}
@@ -221,7 +221,7 @@ function FilterChip({ active, onClick, children }: { active: boolean; onClick: (
       aria-pressed={active}
       className={cn(
         'rounded-full border px-4 py-1.5 text-sm font-medium transition-colors',
-        active ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-card text-muted-foreground hover:border-accent hover:text-accent',
+        active ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-card text-muted-foreground hover:border-primary hover:text-primary',
       )}
     >
       {children}
@@ -251,7 +251,7 @@ function Paginator({ current, total, onChange, prevLabel, nextLabel }: { current
         type="button"
         onClick={() => onChange(current - 1)}
         disabled={current <= 1}
-        className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium transition-colors hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-40"
+        className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
       >
         <ChevronRight className="size-4 flip-x" aria-hidden />
         {prevLabel}
@@ -269,7 +269,7 @@ function Paginator({ current, total, onChange, prevLabel, nextLabel }: { current
             aria-current={item === current ? 'page' : undefined}
             className={cn(
               'grid size-10 place-items-center rounded-full border text-sm font-semibold transition-colors',
-              item === current ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-card hover:border-accent hover:text-accent',
+              item === current ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-card hover:border-primary hover:text-primary',
             )}
           >
             <span dir="ltr">{item}</span>
@@ -280,7 +280,7 @@ function Paginator({ current, total, onChange, prevLabel, nextLabel }: { current
         type="button"
         onClick={() => onChange(current + 1)}
         disabled={current >= total}
-        className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium transition-colors hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-40"
+        className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
       >
         {nextLabel}
         <ChevronLeft className="size-4 flip-x" aria-hidden />

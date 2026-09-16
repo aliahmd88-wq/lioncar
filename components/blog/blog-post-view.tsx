@@ -26,13 +26,13 @@ export function BlogPostView({ post, related }: { post: BlogPost; related: BlogP
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:py-14">
-      <Link href="/blog" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-accent">
+      <Link href="/blog" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
         <ArrowRight className="size-4 rotate-180 flip-x" aria-hidden />
         {t.blog.backToBlog}
       </Link>
 
       <header className="mt-8 flex flex-col gap-4">
-        <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-accent">
+        <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-primary">
           {catLabel ? <span>{catLabel}</span> : null}
           <span className="inline-flex items-center gap-1.5 text-muted-foreground">
             <Clock className="size-3.5" aria-hidden />
@@ -54,7 +54,7 @@ export function BlogPostView({ post, related }: { post: BlogPost; related: BlogP
       {post.content ? (
         <LocalizedHtml
           value={post.content}
-          className="mt-10 leading-relaxed text-foreground/90 [&_a]:text-accent [&_a]:underline [&_h2]:mt-8 [&_h2]:font-serif [&_h2]:text-2xl [&_h2]:font-bold [&_h3]:mt-6 [&_h3]:font-serif [&_h3]:text-xl [&_h3]:font-bold [&_img]:my-6 [&_img]:rounded-2xl [&_li]:mb-2 [&_ol]:my-4 [&_ol]:list-decimal [&_ol]:ps-6 [&_p]:mb-4 [&_ul]:my-4 [&_ul]:list-disc [&_ul]:ps-6"
+          className="mt-10 leading-relaxed text-foreground/90 [&_a]:text-primary [&_a]:underline [&_h2]:mt-8 [&_h2]:font-serif [&_h2]:text-2xl [&_h2]:font-bold [&_h3]:mt-6 [&_h3]:font-serif [&_h3]:text-xl [&_h3]:font-bold [&_img]:my-6 [&_img]:rounded-2xl [&_li]:mb-2 [&_ol]:my-4 [&_ol]:list-decimal [&_ol]:ps-6 [&_p]:mb-4 [&_ul]:my-4 [&_ul]:list-disc [&_ul]:ps-6"
         />
       ) : null}
 
@@ -73,7 +73,7 @@ export function BlogPostView({ post, related }: { post: BlogPost; related: BlogP
                     </span>
                   )}
                 </div>
-                <h3 className="line-clamp-2 font-serif text-base font-bold leading-snug group-hover:text-accent">{r.title}</h3>
+                <h3 className="line-clamp-2 font-serif text-base font-bold leading-snug group-hover:text-primary">{r.title}</h3>
               </Link>
             ))}
           </div>

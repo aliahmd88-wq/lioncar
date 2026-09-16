@@ -64,7 +64,7 @@ export function VehicleDetail({ vehicle }: { vehicle: Vehicle }) {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-      <Link href="/cars" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-accent">
+      <Link href="/cars" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
         <ArrowRight className="size-4 rotate-180 flip-x" aria-hidden />
         {t.saleDetail.backToCars}
       </Link>
@@ -89,7 +89,7 @@ export function VehicleDetail({ vehicle }: { vehicle: Vehicle }) {
                   onClick={() => setActive(img)}
                   className={cn(
                     'relative h-20 w-28 overflow-hidden rounded-xl border-2 transition-colors',
-                    active === img ? 'border-accent' : 'border-border hover:border-accent/50',
+                    active === img ? 'border-primary' : 'border-border hover:border-primary/50',
                   )}
                 >
                   <Image src={img || '/placeholder.svg'} alt="" fill sizes="112px" className="object-cover" />
@@ -101,7 +101,7 @@ export function VehicleDetail({ vehicle }: { vehicle: Vehicle }) {
 
         <div className="flex flex-col gap-5">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
+            <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
               {isImport ? t.cars.sectionImport : t.cars.sectionSale}
             </span>
             {vehicle.isTaxi ? (
@@ -151,7 +151,7 @@ export function VehicleDetail({ vehicle }: { vehicle: Vehicle }) {
               <ul className="grid gap-2 sm:grid-cols-2">
                 {vehicle.highlights.map((h, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm">
-                    <Check className="mt-0.5 size-4 shrink-0 text-accent" aria-hidden />
+                    <Check className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
                     {pick(h, locale)}
                   </li>
                 ))}
@@ -168,7 +168,7 @@ export function VehicleDetail({ vehicle }: { vehicle: Vehicle }) {
           <dl className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {specRows.map((row, i) => (
               <div key={i} className="flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3">
-                <span className="grid size-9 place-items-center rounded-xl bg-secondary text-accent">
+                <span className="grid size-9 place-items-center rounded-xl bg-secondary text-primary">
                   <row.icon className="size-4" aria-hidden />
                 </span>
                 <div className="min-w-0">
@@ -195,7 +195,7 @@ export function VehicleDetail({ vehicle }: { vehicle: Vehicle }) {
                   <span
                     className={cn(
                       'grid size-9 place-items-center rounded-full text-sm font-bold',
-                      reached ? 'bg-accent text-accent-foreground' : 'border border-border text-muted-foreground',
+                      reached ? 'bg-primary text-primary-foreground' : 'border border-border text-muted-foreground',
                     )}
                   >
                     {reached ? <Check className="size-4" aria-hidden /> : i + 1}

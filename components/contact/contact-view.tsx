@@ -7,7 +7,7 @@ import { PageHeader } from '@/components/page-header'
 import type { StoreSettings } from '@/lib/wp/types'
 
 export function ContactView({ store }: { store: StoreSettings }) {
-  const { t } = useLanguage()
+  const { t, locale } = useLanguage()
   const wa = store.whatsapp.replace(/[^\d]/g, '')
 
   const [form, setForm] = useState({ name: '', phone: '', subject: 'parts', message: '' })
@@ -40,11 +40,11 @@ export function ContactView({ store }: { store: StoreSettings }) {
     { icon: MessageCircle, label: t.contact.whatsappLabel, value: `+${wa}`, href: `https://wa.me/${wa}`, ltr: true },
     { icon: Mail, label: t.contact.emailLabel, value: store.email, href: `mailto:${store.email}`, ltr: true },
     { icon: MapPin, label: t.contact.addressLabel, value: store.address, href: null, ltr: false },
-    { icon: Clock, label: t.contact.hoursLabel, value: store.hours, href: null, ltr: false },
+    { icon: Clock, label: t.contact.hoursLabel, value: locale === 'en' ? store.hours : t.seo.openingHoursText, href: null, ltr: false },
   ]
 
   const inputClass =
-    'w-full rounded-2xl border border-border bg-background px-4 py-3 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-accent'
+    'w-full rounded-2xl border border-border bg-background px-4 py-3 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-primary'
 
   return (
     <>
@@ -56,7 +56,7 @@ export function ContactView({ store }: { store: StoreSettings }) {
             {details.map((d) => {
               const content = (
                 <span className="flex items-center gap-4">
-                  <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-secondary text-accent">
+                  <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-secondary text-primary">
                     <d.icon className="size-5" aria-hidden />
                   </span>
                   <span className="min-w-0">
@@ -155,7 +155,7 @@ export function ContactView({ store }: { store: StoreSettings }) {
               <button
                 type="button"
                 onClick={onEmail}
-                className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-semibold transition-colors hover:border-accent hover:text-accent"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-semibold transition-colors hover:border-primary hover:text-primary"
               >
                 <Send className="size-4" aria-hidden />
                 {t.contact.send}

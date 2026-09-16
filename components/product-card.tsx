@@ -63,9 +63,9 @@ export function ProductCard({ product }: { product: Product }) {
 
       <div className="flex flex-1 flex-col gap-3 p-5">
         {product.brand ? (
-          <span className="text-xs font-semibold uppercase tracking-wider text-accent">{product.brand}</span>
+          <span className="text-xs font-semibold uppercase tracking-wider text-primary">{product.brand}</span>
         ) : null}
-        <Link href={href} className="line-clamp-2 font-serif text-lg font-bold leading-snug hover:text-accent">
+        <Link href={href} className="line-clamp-2 font-serif text-lg font-bold leading-snug hover:text-primary">
           {name}
         </Link>
 
@@ -86,7 +86,7 @@ export function ProductCard({ product }: { product: Product }) {
             className={cn(
               'inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50',
               added
-                ? 'bg-accent text-accent-foreground'
+                ? 'bg-primary text-primary-foreground'
                 : 'bg-primary text-primary-foreground hover:bg-primary/90',
             )}
             aria-label={t.common.addToCart}

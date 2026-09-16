@@ -47,7 +47,7 @@ export function VehicleFaq() {
                   aria-expanded={isOpen}
                 >
                   <span className="font-serif text-base font-bold">{item.q}</span>
-                  <Plus className={cn('size-5 shrink-0 text-accent transition-transform', isOpen && 'rotate-45')} aria-hidden />
+                  <Plus className={cn('size-5 shrink-0 text-primary transition-transform', isOpen && 'rotate-45')} aria-hidden />
                 </button>
                 <div className={cn('grid transition-all duration-300', isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]')}>
                   <div className="overflow-hidden">

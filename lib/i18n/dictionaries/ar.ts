@@ -698,6 +698,13 @@ export const ar: Dictionary = {
     areaServed: 'إسرائيل',
     openingHoursText: 'كل يوم ما عدا الجمعة، 09:00–18:00',
   },
+  notFound: {
+    eyebrow: '404',
+    title: 'هذه الصفحة غير موجودة',
+    lead: 'ربما تغيّر الرابط أو أُزيلت الصفحة. القطع والمركبات ما زالت هنا.',
+    home: 'إلى الصفحة الرئيسية',
+    parts: 'إلى كتالوج القطع',
+  },
   productsFilters: {
     brandsLabel: 'ماركة الشاحنة',
     allBrands: 'كل الماركات',
