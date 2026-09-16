@@ -12,17 +12,21 @@ export function asArray(value: unknown): string[] {
   return []
 }
 
+const ENTITIES: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', hellip: '…', ndash: '–', mdash: '—', laquo: '«', raquo: '»', rsquo: '’', lsquo: '‘', rdquo: '”', ldquo: '“' }
+
+/** Turns HTML entities back into characters (WordPress excerpts arrive as "… [&hellip;]"). */
+export function decodeEntities(value: string): string {
+  return value
+    .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, code) => String.fromCodePoint(parseInt(code, 16)))
+    .replace(/&([a-z]+);/gi, (match, name) => ENTITIES[name.toLowerCase()] ?? match)
+}
+
 export function stripHtml(html: string | null | undefined): string {
   if (!html) return ''
-  return html
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&#8211;/g, '–')
-    .replace(/&#8217;/g, '’')
-    .replace(/&quot;/g, '"')
-    .replace(/\s+/g, ' ')
-    .trim()
+  const text = decodeEntities(html.replace(/<[^>]*>/g, ' ')).replace(/\s+/g, ' ').trim()
+  // WordPress closes auto-excerpts with " […]"; a plain ellipsis reads better.
+  return text.replace(/\s*\[…\]\s*$/, '…')
 }
 
 export function cleanPrice(price: string | null | undefined): string | null {
