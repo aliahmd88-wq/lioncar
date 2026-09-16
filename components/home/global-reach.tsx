@@ -23,7 +23,7 @@ function canAnimate() {
  * The rotating globe from ALI FLEET: the three import steps on one side, a
  * WebGL globe on the other that turns on its own, swings to the relevant city
  * when a step is hovered, and can be dragged. Colours follow Lion Car: dark
- * land, orange markers on the import markets and on Haifa.
+ * land, gold markers on the import markets and on Haifa.
  */
 export function GlobalReach() {
   const { t } = useLanguage()
@@ -140,7 +140,7 @@ export function GlobalReach() {
           mapSamples: 9000,
           mapBrightness: 5,
           baseColor: [0.18, 0.18, 0.19],
-          markerColor: [1, 0.4, 0.05],
+          markerColor: [0.83, 0.65, 0.17],
           glowColor: [1, 1, 1],
           markers: [
             { location: [32.794, 34.9896], size: 0.09 },

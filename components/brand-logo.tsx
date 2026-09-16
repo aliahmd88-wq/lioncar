@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { cn } from '@/lib/utils'
 
 export function LionMark() {
-  return <Image src="/brand/lion-mark.png" alt="" width={48} height={48} className="size-12 shrink-0 rounded-md object-contain" />
+  return <Image src="/brand/lion-logo.png" alt="" width={34} height={48} className="h-12 w-auto shrink-0 object-contain" priority />
 }
 
 export function BrandLogo({ inverse = false, compact = false }: { inverse?: boolean; compact?: boolean }) {

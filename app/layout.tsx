@@ -30,7 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
       locale: { he: 'he_IL', ar: 'ar_IL', en: 'en_IL' }[locale],
       siteName: t.seo.orgName,
       url: localeHref(path, locale),
-      images: [{ url: '/images/truck-fleet-hero.png', width: 1024, height: 1024, alt: t.nav.brand }],
+      images: [{ url: '/brand/lion-og.png', width: 1200, height: 630, alt: t.nav.brand }],
     },
     alternates: {
       canonical: localeHref(path, locale),
@@ -57,7 +57,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     inLanguage: locale,
     description: t.seo.siteDescription,
     url: `${siteUrl()}/${locale}`,
-    image: `${siteUrl()}/images/truck-fleet-hero.png`,
+    image: `${siteUrl()}/brand/lion-og.png`,
     logo: `${siteUrl()}/brand/lion-mark.png`,
     telephone: store.phone || undefined,
     email: store.email || undefined,

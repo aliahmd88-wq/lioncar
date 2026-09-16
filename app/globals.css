@@ -56,7 +56,11 @@
   --card-foreground: var(--foreground);
   --popover: var(--background);
   --popover-foreground: var(--foreground);
-  --primary: #ff6500;
+  /* Brand palette measured from the logo: lion gold, crown gold, black, wheel silver. */
+  --primary: #d4a72c;
+  --primary-strong: #a8862a;
+  --primary-soft: #f6efd9;
+  --silver: #e4e4e4;
   --primary-foreground: var(--foreground);
   --secondary: #f3f4f5;
   --secondary-foreground: var(--foreground);
