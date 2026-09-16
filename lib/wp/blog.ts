@@ -26,12 +26,22 @@ function localizedField(acf: Record<string, unknown> | null | undefined, base: s
   return typeof value === 'string' ? value.trim() : ''
 }
 
+/** WordPress category slugs (e.g. "truck-he", "various-he") folded onto the site's own category keys; unknown ones show their WordPress name. */
+const CATEGORY_KEYS: Record<string, string> = { news: 'news', import: 'import', importing: 'import', fleet: 'fleet', truck: 'fleet', trucks: 'fleet', vehicles: 'fleet', parts: 'parts', spare: 'parts', tips: 'tips', various: 'tips', guides: 'tips' }
+
+function resolveCategory(acf: Record<string, unknown> | null, node: { slug?: string; name?: string } | undefined): string | null {
+  const fromAcf = typeof acf?.blogCategory === 'string' ? acf.blogCategory.trim() : ''
+  if (fromAcf && CATEGORY_KEYS[fromAcf]) return CATEGORY_KEYS[fromAcf]
+  const slug = (node?.slug ?? '').replace(/-(he|ar|en)$/, '')
+  if (CATEGORY_KEYS[slug]) return CATEGORY_KEYS[slug]
+  return node?.name ? stripHtml(node.name) : fromAcf || null
+}
+
 function normalize(raw: any, locale: Locale, withContent = false): BlogPost {
   const acf = (raw?.blogPostFields ?? null) as Record<string, unknown> | null
   const title = localizedField(acf, 'postTitle', locale) || localizedField(acf, 'postTitle', 'he') || stripHtml(raw.title) || raw.title
   const excerpt = localizedField(acf, 'postExcerpt', locale) || localizedField(acf, 'postExcerpt', 'he') || stripHtml(raw.excerpt)
-  const acfCategory = typeof acf?.blogCategory === 'string' ? acf.blogCategory : null
-  const category = acfCategory || raw?.categories?.nodes?.[0]?.slug || null
+  const category = resolveCategory(acf, raw?.categories?.nodes?.[0])
   const readingMinutes = Number(acf?.readingMinutes)
   return {
     slug: raw.slug,
