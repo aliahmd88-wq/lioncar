@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { defaultLocale, isLocale, localeFromPath, localeHref, LOCALE_COOKIE, stripLocale } from '@/lib/i18n/config'
 
+/** The owner's habit: typing /wp-admin on the storefront opens the store's WordPress. */
+const WP_ADMIN_ORIGIN = process.env.WORDPRESS_STORE_URL?.replace(/\/+$/, '') || 'https://a-f.site'
+
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
+  if (/^\/(?:[a-z]{2}\/)?(?:wp-admin|wp-login\.php)(?:\/|$)/.test(pathname)) {
+    const target = pathname.replace(/^\/[a-z]{2}(?=\/)/, '')
+    return NextResponse.redirect(`${WP_ADMIN_ORIGIN}${target}${request.nextUrl.search}`, 307)
+  }
   const locale = localeFromPath(pathname)
   if (!locale) {
     const preference = request.cookies.get(LOCALE_COOKIE)?.value
